@@ -25,7 +25,7 @@
     "observaciones": "",
     "editableLink": "https://canva.link/rsu6o5kwf8f2b6x",
     "fichaAprobada": "https://www.notion.so/3f392105e1968148bc54d1ead72c4182",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f392105e1968148bc54d1ead72c4182.png",
     "url": "https://app.notion.com/p/01-Diario-de-quien-termina-pagando-todo-Diario-de-3fb92105e19681aa9da7d3d808a6d3fa"
   },
   {
@@ -54,7 +54,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f192105e1968181b65dc6956e86025f",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f192105e1968181b65dc6956e86025f.png",
     "url": "https://app.notion.com/p/02-Lo-que-la-gente-cree-lo-que-realmente-es-3fb92105e1968137bf9af421ae4f1d6d"
   },
   {
@@ -83,7 +83,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681c48f45d12362b738ca",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681c48f45d12362b738ca.png",
     "url": "https://app.notion.com/p/03-La-falta-de-dinero-drena-tu-cerebro-3fb92105e19681798760ff9433ede00a"
   },
   {
@@ -112,7 +112,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e1968197b2c0c1e9d2e58587",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e1968197b2c0c1e9d2e58587.png",
     "url": "https://app.notion.com/p/04-Entre-tantos-pagos-que-ninguno-se-te-pierda-3fb92105e196814281a3fd5a4fb5df17"
   },
   {
@@ -141,7 +141,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196812eb92dfd40909ef273",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196812eb92dfd40909ef273.png",
     "url": "https://app.notion.com/p/05-Eso-que-tienes-pendiente-con-la-plata-del-negocio-3fb92105e1968155b785eb35987ebc59"
   },
   {
@@ -170,7 +170,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681579fe7c79f0cb37c55",
-    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681579fe7c79f0cb37c55.png",
     "url": "https://app.notion.com/p/06-Tu-cliente-paga-en-d-lares-Global-3fb92105e196815aa8ead9a26130b7a9"
   },
   {
@@ -199,7 +199,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681c19dcad5b7ab55cd38",
-    "coverImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681c19dcad5b7ab55cd38.png",
     "url": "https://app.notion.com/p/07-Vender-es-apenas-el-primer-paso-3fb92105e1968159a117d3e464330915"
   },
   {
@@ -228,7 +228,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681179c4ef0c2dfd4bbf2",
-    "coverImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681179c4ef0c2dfd4bbf2.png",
     "url": "https://app.notion.com/p/08-Tu-negocio-creci-T-no-puedes-multiplicarte-3fb92105e196815ba740eecbcd6e8cdb"
   },
   {
@@ -257,7 +257,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681cc9d5ae744cdd2fae8",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681cc9d5ae744cdd2fae8.png",
     "url": "https://app.notion.com/p/09-Cerrar-la-venta-se-celebra-Cobrar-es-la-victoria-3fb92105e196819fbf34d534f0d0deb4"
   },
   {
@@ -286,7 +286,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e19681488cd8cf0420658178",
-    "coverImage": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e19681488cd8cf0420658178.png",
     "url": "https://app.notion.com/p/10-Tu-negocio-ya-cruz-fronteras-Bitaxus-Global-3fb92105e1968152a67bc509b71430db"
   },
   {
@@ -315,7 +315,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e19681daa2fde6444c006884",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e19681daa2fde6444c006884.png",
     "url": "https://app.notion.com/p/11-Tu-mensajero-entrega-Tu-empresa-recibe-3fb92105e19681538b77d134cf290623"
   },
   {
@@ -344,7 +344,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e1968177a942ff7841a25d5b",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e1968177a942ff7841a25d5b.png",
     "url": "https://app.notion.com/p/12-Ya-conseguiste-el-cliente-Ahora-resolvamos-c-mo-te-paga-Global-3fb92105e19681ddaacde20bdc763050"
   },
   {
@@ -373,7 +373,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e196818cb072d77ddbc1363f",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e196818cb072d77ddbc1363f.png",
     "url": "https://app.notion.com/p/13-Vendiste-un-mont-n-Sabes-cu-nto-te-qued-3fb92105e19681099871c8bc092f3d8b"
   },
   {
@@ -402,7 +402,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e1968112a949eb225eb400fd",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e1968112a949eb225eb400fd.png",
     "url": "https://app.notion.com/p/14-Conecta-la-IA-a-los-pagos-de-tu-negocio-3fb92105e19681dd99bae20d9e7649de"
   },
   {
@@ -431,7 +431,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e19681f39629cf06972f963a",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e19681f39629cf06972f963a.png",
     "url": "https://app.notion.com/p/15-Cerraste-clientes-Y-la-plata-para-la-quincena-Bitaxus-IA-3fb92105e1968101880bf832b1bf1cd0"
   },
   {
@@ -460,7 +460,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e1968158b2e1f35e1bcfa4cb",
-    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e1968158b2e1f35e1bcfa4cb.png",
     "url": "https://app.notion.com/p/16-6-formas-de-trabajar-C-mo-se-mueve-la-plata-en-cada-una-3fb92105e19681938145efbc0aede00b"
   },
   {
@@ -489,7 +489,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196814a9119f8cb3fa6da8c",
-    "coverImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196814a9119f8cb3fa6da8c.png",
     "url": "https://app.notion.com/p/17-P-gale-a-tu-equipo-en-3-pasos-3fb92105e196817092aafea3b9369a35"
   },
   {
@@ -518,7 +518,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681c8a9bff0c88ba1c7db",
-    "coverImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681c8a9bff0c88ba1c7db.png",
     "url": "https://app.notion.com/p/18-Todos-te-preguntan-por-su-pago-3fb92105e19681489e38c8bed14680f1"
   },
   {
@@ -547,7 +547,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196812a94d2fc780c27e195",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196812a94d2fc780c27e195.png",
     "url": "https://app.notion.com/p/19-Tu-trabajo-ya-est-entregado-Y-el-pago-Global-3fb92105e1968162a434c383ca2c98e2"
   },
   {
@@ -576,7 +576,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e19681db8706c8eb9975e772",
-    "coverImage": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e19681db8706c8eb9975e772.png",
     "url": "https://app.notion.com/p/20-Tu-negocio-necesita-vitamina-C-3fb92105e196814f921eed68490595cd"
   },
   {
@@ -605,7 +605,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e1968154b845d9517b00caca",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e1968154b845d9517b00caca.png",
     "url": "https://app.notion.com/p/21-Crecer-expandir-y-escalar-qu-pasa-con-la-plata-3fb92105e196812eab0dcc0a3d059ae6"
   },
   {
@@ -634,7 +634,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196814fafd7da414c880bcc",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196814fafd7da414c880bcc.png",
     "url": "https://app.notion.com/p/22-Tener-clara-la-plata-de-tu-negocio-es-3fb92105e1968142a615e6029773d72c"
   },
   {
@@ -663,7 +663,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e196817e8613c72f30b37f17",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e196817e8613c72f30b37f17.png",
     "url": "https://app.notion.com/p/23-Tu-negocio-creci-Y-todo-sigue-pasando-por-ti-3fb92105e1968158997fc179cb9a166a"
   },
   {
@@ -692,7 +692,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196812a85d7d5a6c91ef348",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196812a85d7d5a6c91ef348.png",
     "url": "https://app.notion.com/p/24-Tu-equipo-creci-La-quincena-te-ocupa-el-d-a-3fb92105e19681079f5af43785c31a03"
   },
   {
@@ -721,7 +721,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196816f915cfc3d1c4ab97f",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196816f915cfc3d1c4ab97f.png",
     "url": "https://app.notion.com/p/25-Tu-primera-venta-emociona-Tu-primer-cobro-pendiente-ense-a-3fb92105e196818d92cbc0618418a95b"
   },
   {
@@ -750,7 +750,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e196812b9013eaacbd079cb0",
-    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e196812b9013eaacbd079cb0.png",
     "url": "https://app.notion.com/p/26-Del-ya-casi-al-pago-recibido-3fb92105e196817c9220f2d587678601"
   },
   {
@@ -779,7 +779,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e1968135ba32c43ab40cedab",
-    "coverImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e1968135ba32c43ab40cedab.png",
     "url": "https://app.notion.com/p/27-La-forma-en-que-te-pagan-puede-ser-distinta-D-lares-digitales-3fb92105e1968140843acf6e987e7bfb"
   },
   {
@@ -808,7 +808,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f292105e19681ab877df462f47d8d2c",
-    "coverImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f292105e19681ab877df462f47d8d2c.png",
     "url": "https://app.notion.com/p/28-Se-te-pas-la-fecha-Ahora-tienes-que-pagar-m-s-3fb92105e19681209c04fe6f9e9f5781"
   },
   {
@@ -837,7 +837,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e19681a08cf0cb7ae64fd3bd",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e19681a08cf0cb7ae64fd3bd.png",
     "url": "https://app.notion.com/p/29-Si-Mar-a-se-tira-de-un-precipicio-D-lares-digitales-y-trazabilidad-3fb92105e196813e9667e8ab0f6291ed"
   },
   {
@@ -866,7 +866,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196813cbc7fd9b0d4a21663",
-    "coverImage": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196813cbc7fd9b0d4a21663.png",
     "url": "https://app.notion.com/p/30-Te-da-pena-cobrar-Diagrama-3fb92105e1968198960fe89039604d8a"
   },
   {
@@ -895,7 +895,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e19681e8b927fd96625fa5cf",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e19681e8b927fd96625fa5cf.png",
     "url": "https://app.notion.com/p/31-Est-s-financiando-a-tus-clientes-Cartera-pendiente-3fb92105e19681ba9b6dcdfd7329a703"
   },
   {
@@ -924,7 +924,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196812f9162d8e39fbe0a1c",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196812f9162d8e39fbe0a1c.png",
     "url": "https://app.notion.com/p/32-En-qu-se-parece-un-contador-a-un-dise-ador-3fb92105e196819eb9afffb3cfd333d8"
   },
   {
@@ -953,7 +953,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e1968188892ec2b817ccad46",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e1968188892ec2b817ccad46.png",
     "url": "https://app.notion.com/p/33-No-es-solo-una-hora-Tiempo-en-cobros-y-pagos-3fb92105e19681a4b88af477bcbabe1a"
   },
   {
@@ -982,7 +982,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e1968161b8d1c7dafc47656a",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e1968161b8d1c7dafc47656a.png",
     "url": "https://app.notion.com/p/34-30-formas-de-poner-en-orden-los-cobros-y-pagos-de-tu-negocio-3fb92105e196819daa50f1bc26be74df"
   },
   {
@@ -1011,7 +1011,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e1968111b819d980c72f76ed",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e1968111b819d980c72f76ed.png",
     "url": "https://app.notion.com/p/35-Y-si-la-IA-te-ayudara-con-el-seguimiento-Agente-de-cartera-3fb92105e19681b2a3b5ce98b182da74"
   },
   {
@@ -1040,7 +1040,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e1968138aea0e33458065d7d",
-    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e1968138aea0e33458065d7d.png",
     "url": "https://app.notion.com/p/36-5-tareas-de-cobros-y-pagos-desde-WhatsApp-3fb92105e19681ad8381f60ab0b15baf"
   },
   {
@@ -1069,7 +1069,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196813e9a90c66bef57e62a",
-    "coverImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196813e9a90c66bef57e62a.png",
     "url": "https://app.notion.com/p/37-Son-las-10-de-la-noche-Qui-n-verifica-los-pagos-Varios-puntos-3fb92105e19681d0a08ffb281dbf384e"
   },
   {
@@ -1098,7 +1098,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f792105e19681748d0bf52e9bd00327",
-    "coverImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f792105e19681748d0bf52e9bd00327.png",
     "url": "https://app.notion.com/p/38-T-ya-sabes-qu-necesita-cambiar-La-memoria-de-tu-negocio-3fb92105e1968187bac6ed28b1d7d7f2"
   },
   {
@@ -1127,7 +1127,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e19681cdbb15d7167272d444",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e19681cdbb15d7167272d444.png",
     "url": "https://app.notion.com/p/39-Ser-due-o-no-te-da-superpoderes-Los-Incre-bles-3fb92105e1968192a38fff707cb171d0"
   },
   {
@@ -1156,7 +1156,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196811d8c02f113700df93a",
-    "coverImage": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196811d8c02f113700df93a.png",
     "url": "https://app.notion.com/p/40-Intensamente-pero-cuando-toca-cobrar-3fb92105e19681e48207fa6d09cf4075"
   },
   {
@@ -1185,7 +1185,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196812d8b91eef1401cf268",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196812d8b91eef1401cf268.png",
     "url": "https://app.notion.com/p/41-Los-Supers-nicos-ten-an-a-Robotina-Cobros-y-pagos-con-IA-3fb92105e196812fbf45d2d808e093ee"
   },
   {
@@ -1214,7 +1214,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e19681dc80dffb8539824abc",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e19681dc80dffb8539824abc.png",
     "url": "https://app.notion.com/p/42-Detr-s-de-cada-venta-Bob-Esponja-3fb92105e196812f8172fd88a9ab7094"
   },
   {
@@ -1243,7 +1243,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f792105e19681509641fb2664737605",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f792105e19681509641fb2664737605.png",
     "url": "https://app.notion.com/p/43-Tu-trabajo-ya-cruza-fronteras-Bitaxus-Global-3fb92105e196812891d9c4daaef762c2"
   },
   {
@@ -1272,7 +1272,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e196818b956fd4db601b6015",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e196818b956fd4db601b6015.png",
     "url": "https://app.notion.com/p/44-10-tareas-que-queremos-que-dejes-de-hacer-a-mano-Bitaxus-IA-3fb92105e196813ca555f3b44ffab7ac"
   },
   {
@@ -1301,7 +1301,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f692105e19681aa81c9c21a3dfc53e4",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f692105e19681aa81c9c21a3dfc53e4.png",
     "url": "https://app.notion.com/p/45-PIONEROS-Bitaxus-Acceso-anticipado-3fb92105e19681379038d1b8ee05a0d1"
   },
   {
@@ -1330,7 +1330,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f792105e196814cb887c39c478c13d5",
-    "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f792105e196814cb887c39c478c13d5.png",
     "url": "https://app.notion.com/p/46-Cu-nto-debes-esperar-D-lares-digitales-a-COP-por-Bre-B-3fb92105e196817a84dccf615d48cb38"
   },
   {
@@ -1359,7 +1359,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f792105e196818db448c81f2e668c41",
-    "coverImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f792105e196818db448c81f2e668c41.png",
     "url": "https://app.notion.com/p/47-Mejor-hago-los-pagos-yo-Delegar-sin-perder-la-autorizaci-n-3fb92105e196816e8305cdebf3d8f8f4"
   },
   {
@@ -1388,7 +1388,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e19681ee85e1ea2a3a1f64af",
-    "coverImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e19681ee85e1ea2a3a1f64af.png",
     "url": "https://app.notion.com/p/48-Tu-trabajo-cruza-fronteras-Cobrarlo-no-deber-a-ser-un-obst-culo-Global-3fb92105e196812490d9ca52850484ec"
   },
   {
@@ -1417,7 +1417,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f792105e19681eb96b7fb1d5814a78c",
-    "coverImage": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f792105e19681eb96b7fb1d5814a78c.png",
     "url": "https://app.notion.com/p/49-Clientes-de-otros-pa-ses-sue-o-y-cobro-Bitaxus-Global-3fb92105e19681478e89c7f9a3641ea0"
   },
   {
@@ -1446,7 +1446,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e19681df99dedc94a6533040",
-    "coverImage": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e19681df99dedc94a6533040.png",
     "url": "https://app.notion.com/p/50-Eliges-c-mo-cobrar-Global-3fb92105e196813985d7c70d23728290"
   },
   {
@@ -1475,7 +1475,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e196815e889dead15fbbdb15",
-    "coverImage": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e196815e889dead15fbbdb15.png",
     "url": "https://app.notion.com/p/51-Tus-d-lares-digitales-a-pesos-con-tu-llave-Bre-B-Global-3fb92105e19681f1b239c83fc2841abc"
   },
   {
@@ -1504,7 +1504,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e19681828bdbd7825e567653",
-    "coverImage": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e19681828bdbd7825e567653.png",
     "url": "https://app.notion.com/p/52-No-saber-c-mo-cobrar-a-clientes-de-otro-pa-s-te-est-costando-Global-3fb92105e19681909b98e0b1c56673e3"
   },
   {
@@ -1533,7 +1533,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e196818f990fde207f2f9d74",
-    "coverImage": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e196818f990fde207f2f9d74.png",
     "url": "https://app.notion.com/p/53-5-se-ales-de-que-la-forma-en-que-cobras-te-hace-perder-dinero-Global-3fb92105e196816e83c3de88eae4c332"
   },
   {
@@ -1562,7 +1562,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f892105e1968161b8e2ca9542f19907",
-    "coverImage": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f892105e1968161b8e2ca9542f19907.png",
     "url": "https://app.notion.com/p/54-Domino-s-la-plata-de-cada-local-Tesorer-a-por-punto-3fb92105e1968173878bca5e12eafde1"
   },
   {
@@ -1591,7 +1591,7 @@
     "observaciones": "",
     "editableLink": "",
     "fichaAprobada": "https://www.notion.so/3f592105e19681d8896cc690b703bd5e",
-    "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+    "coverImage": "./boards/3f592105e19681d8896cc690b703bd5e.png",
     "url": "https://app.notion.com/p/55-Entr-plata-Tienes-luz-verde-para-gastarla-3fb92105e19681ebb29ff331a8f9f48d"
   }
 ]
