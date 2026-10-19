@@ -22,19 +22,51 @@ export default function ReferentePreviewModal({ post, onClose }) {
     setTimeout(() => setCopiedSlide(null), 2000);
   };
 
-  // Separar el copy por láminas / secciones si contiene markdown **
+  // Separar el copy por láminas / secciones de manera limpia y robusta
   const parseSections = (text) => {
     if (!text) return [];
-    const parts = text.split(/(?=\*\*[0-9A-Za-zÁ-ÿ\s\.\—\-]+\*\*)/g).filter(Boolean);
-    if (parts.length <= 1) {
-      return [{ title: "Copy Completo de la Pieza", content: text }];
+    const regex = /(?:^|\n)\*\*([^\*\n]+)\*\*\s*\n?/g;
+    let matches = [];
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      matches.push({
+        title: match[1].trim(),
+        index: match.index,
+        headerLength: match[0].length
+      });
     }
-    return parts.map((part, i) => {
-      const match = part.match(/\*\*([^*]+)\*\*/);
-      const title = match ? match[1] : `Lámina ${i + 1}`;
-      const content = part.replace(/\*\*([^*]+)\*\*/, '').trim();
-      return { title, content };
-    });
+
+    if (matches.length === 0) {
+      return [{ title: "Copy Completo de la Pieza", content: text.trim() }];
+    }
+
+    const result = [];
+    if (matches[0].index > 0) {
+      const preContent = text.slice(0, matches[0].index).trim();
+      if (preContent) {
+        result.push({ title: "Introducción", content: preContent });
+      }
+    }
+
+    for (let i = 0; i < matches.length; i++) {
+      const current = matches[i];
+      const startIndex = current.index + current.headerLength;
+      const endIndex = (i + 1 < matches.length) ? matches[i + 1].index : text.length;
+      const content = text.slice(startIndex, endIndex).trim();
+      
+      // Si el título es solo un número, por ejemplo "4", formatearlo a "Lámina 4"
+      let displayTitle = current.title;
+      if (/^\d+$/.test(displayTitle)) {
+        displayTitle = `Lámina ${displayTitle}`;
+      }
+
+      result.push({
+        title: displayTitle,
+        content: content || displayTitle
+      });
+    }
+
+    return result;
   };
 
   const sections = parseSections(fullCopy);
