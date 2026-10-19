@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Film, Image as ImageIcon, Sparkles, Link as LinkIcon, RefreshCw } from 'lucide-react';
+import { X, Save, Film, Image as ImageIcon, Link as LinkIcon, RefreshCw } from 'lucide-react';
 
 const ETAPAS = ['Atracción', 'Validación', 'Venta', 'Fidelización'];
 const ESTADOS = ['Aprobado (Copy y Board)', 'Editable cargado', 'Programado', 'Publicado'];
@@ -43,7 +43,6 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
         ...post
       });
     } else {
-      // Default nuevo post
       setFormData({
         pieza: '',
         estado: 'Aprobado (Copy y Board)',
@@ -85,27 +84,27 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="bg-[#111113] border border-[#2e2e33] rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
         
         {/* Modal Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-850">
+        <div className="p-5 border-b border-[#232327] flex items-center justify-between bg-[#18181b]">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-tr from-rose-500 to-purple-600 text-white shadow-md">
+            <div className="p-2.5 rounded-xl bg-[#c1121f] text-white shadow-md">
               <Film size={20} />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">
-                {post?.id ? 'Editar Publicación & Referente' : 'Nueva Publicación para Feed'}
+              <h2 className="text-base font-bold text-white uppercase tracking-wide font-sans">
+                {post?.id ? 'Editar Publicación & Referente' : 'Nueva Publicación Bitaxus'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#8b8b94]">
                 Guarda los cambios y sincroniza automáticamente con Notion
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-lg text-[#8b8b94] hover:text-white hover:bg-[#202024] transition-colors"
           >
             <X size={18} />
           </button>
@@ -115,14 +114,13 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6">
           
           {/* SECCIÓN 1: LINK DE REFERENTE Y MINIATURA */}
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-4">
-            <div className="flex items-center gap-2 text-rose-400 font-bold text-xs uppercase tracking-wider">
+          <div className="p-4 rounded-xl bg-black border border-[#232327] space-y-4">
+            <div className="flex items-center gap-2 text-[#ff4d57] font-bold text-xs uppercase tracking-wider">
               <LinkIcon size={14} />
               <span>Link del Referente e Imagen del Post</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Input Link Referente */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Enlace del Referente (Instagram / TikTok / Drive)
@@ -133,11 +131,10 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                   value={formData.linkReferente}
                   onChange={handleChange}
                   placeholder="https://www.instagram.com/reel/... o TikTok"
-                  className="w-full bg-slate-900 text-slate-100 text-xs rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3.5 py-2.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
                 />
               </div>
 
-              {/* Input Miniatura URL */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
                   URL de Miniatura / Portada (Cover)
@@ -148,22 +145,21 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                   value={formData.coverImage}
                   onChange={handleChange}
                   placeholder="https://images.unsplash.com/... o enlace de imagen"
-                  className="w-full bg-slate-900 text-slate-100 text-xs rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3.5 py-2.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
                 />
               </div>
             </div>
 
-            {/* Vista previa miniatura si hay URL */}
             {formData.coverImage && (
-              <div className="flex items-center gap-4 p-2.5 bg-slate-900 rounded-xl border border-slate-800">
+              <div className="flex items-center gap-4 p-2.5 bg-[#18181b] rounded-xl border border-[#2e2e33]">
                 <img
                   src={formData.coverImage}
                   alt="Preview"
                   className="w-16 h-16 rounded-lg object-cover"
                 />
                 <div className="text-xs">
-                  <span className="font-semibold text-slate-200">Vista previa de la miniatura</span>
-                  <p className="text-slate-400 text-[11px]">Esta imagen aparecerá en el encabezado de la tarjeta en el calendario</p>
+                  <span className="font-semibold text-white">Vista previa de la miniatura</span>
+                  <p className="text-[#8b8b94] text-[11px]">Esta imagen aparecerá en el encabezado de la tarjeta en el calendario</p>
                 </div>
               </div>
             )}
@@ -183,21 +179,21 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                   value={formData.pieza}
                   onChange={handleChange}
                   placeholder="Ej: 07. Vender es apenas el primer paso"
-                  className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500 font-semibold"
+                  className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3.5 py-2.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f] font-semibold"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Producto Promocionado
+                  Producto / Pilar Promocionado
                 </label>
                 <input
                   type="text"
                   name="producto"
                   value={formData.producto}
                   onChange={handleChange}
-                  placeholder="Ej: Shoes Rack 12 unidades / Organizador de Gorras"
-                  className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  placeholder="Ej: Bitaxus Global / Dólares Digitales"
+                  className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3.5 py-2.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
                 />
               </div>
             </div>
@@ -212,21 +208,20 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 value={formData.hook}
                 onChange={handleChange}
                 placeholder="El texto o frase con la que abre el video o carrusel para enganchar..."
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl p-3 border border-[#2e2e33] focus:outline-none focus:border-amber-400"
               />
             </div>
           </div>
 
           {/* SECCIÓN 3: ESTRATEGIA (ETAPA, ESTADO, CALENDARIO) */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Etapa</label>
               <select
                 name="etapa"
                 value={formData.etapa}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {ETAPAS.map(e => <option key={e} value={e}>{e}</option>)}
               </select>
@@ -238,7 +233,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 name="estado"
                 value={formData.estado}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {ESTADOS.map(e => <option key={e} value={e}>{e}</option>)}
               </select>
@@ -250,7 +245,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 name="dia"
                 value={formData.dia}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {DIAS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
@@ -262,24 +257,22 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 name="turno"
                 value={formData.turno}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {TURNOS.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
-
           </div>
 
-          {/* SECCIÓN 4: DETALLES DE FORMATO Y PRODUCCIÓN */}
+          {/* SECCIÓN 4: DETALLES DE FORMATO */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">Ángulo de Venta</label>
               <select
                 name="anguloVenta"
                 value={formData.anguloVenta}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {ANGULOS.map(a => <option key={a} value={a}>{a}</option>)}
               </select>
@@ -291,7 +284,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 name="categoria"
                 value={formData.categoria}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -303,7 +296,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 name="formato"
                 value={formData.formato}
                 onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               >
                 {FORMATOS.map(f => <option key={f} value={f}>{f}</option>)}
               </select>
@@ -317,15 +310,13 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 value={formData.semana}
                 onChange={handleChange}
                 placeholder="Semana 01"
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl px-3 py-2 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               />
             </div>
-
           </div>
 
-          {/* SECCIÓN 5: GUIÓN, STORYTELLING Y NOTAS */}
+          {/* SECCIÓN 5: GUIÓN Y NOTAS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Guión / Copy Completo
@@ -336,7 +327,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 value={formData.guionCopy}
                 onChange={handleChange}
                 placeholder="Escribe el copy o pega el link del documento..."
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl p-3 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               />
             </div>
 
@@ -350,89 +341,24 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
                 value={formData.storytelling}
                 onChange={handleChange}
                 placeholder="¿Qué emoción o historia se cuenta en esta pieza?"
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Notas sobre el Referente
-              </label>
-              <textarea
-                name="notasReferentes"
-                rows={2}
-                value={formData.notasReferentes}
-                onChange={handleChange}
-                placeholder="Planos, iluminación o detalles a imitar del referente..."
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Estrategia en Historias
-              </label>
-              <textarea
-                name="historias"
-                rows={2}
-                value={formData.historias}
-                onChange={handleChange}
-                placeholder="Historias complementarias, encuestas, link de compra..."
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-              />
-            </div>
-
-          </div>
-
-          {/* SECCIÓN 6: ENTREGA Y RESPONSABLE */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-800">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Responsable</label>
-              <input
-                type="text"
-                name="responsable"
-                value={formData.responsable}
-                onChange={handleChange}
-                placeholder="Gabi"
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Fecha de Entrega</label>
-              <input
-                type="date"
-                name="fechaEntrega"
-                value={formData.fechaEntrega}
-                onChange={handleChange}
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Link de Entrega (Drive)</label>
-              <input
-                type="url"
-                name="linkEntrega"
-                value={formData.linkEntrega}
-                onChange={handleChange}
-                placeholder="https://drive.google.com/..."
-                className="w-full bg-slate-850 text-slate-100 text-xs rounded-xl px-3 py-2 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-[#0c0c0e] text-white text-xs rounded-xl p-3 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
               />
             </div>
           </div>
 
           {/* Modal Footer */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+          <div className="pt-4 border-t border-[#232327] flex items-center justify-between">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#18181b] hover:bg-[#202024] border border-[#2e2e33] text-white text-xs font-semibold transition-colors"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-purple-600 hover:from-rose-400 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-rose-500/20 transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#c1121f] hover:bg-[#d61a28] text-white text-xs font-bold shadow-lg shadow-[#c1121f]/30 transition-all disabled:opacity-50 uppercase tracking-wide"
             >
               {isSaving ? (
                 <>
@@ -442,7 +368,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
               ) : (
                 <>
                   <Save size={14} />
-                  <span>Guardar y Sincronizar en Notion</span>
+                  <span>Guardar y Sincronizar</span>
                 </>
               )}
             </button>
