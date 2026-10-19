@@ -10,7 +10,8 @@ import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
   const [posts, setPosts] = useState(() => {
-    const cached = localStorage.getItem('ig_planner_posts');
+    // Si tenemos los posts estáticos actualizados de Notion, usarlos como fuente de verdad
+    const cached = localStorage.getItem('ig_planner_posts_v2');
     if (cached) {
       try { return JSON.parse(cached); } catch (e) {}
     }
@@ -48,28 +49,24 @@ export default function App() {
         setNotionStatus({ connected: false, isStatic: true });
       }
 
-      // 2. Posts
+      // 2. Posts (si el backend local está corriendo)
       const postsRes = await fetch('/api/posts').catch(() => null);
       if (postsRes && postsRes.ok) {
         const postsData = await postsRes.json();
         if (Array.isArray(postsData) && postsData.length > 0) {
           setPosts(postsData);
-          localStorage.setItem('ig_planner_posts', JSON.stringify(postsData));
+          localStorage.setItem('ig_planner_posts_v2', JSON.stringify(postsData));
           showToast(`Sincronizadas ${postsData.length} piezas desde Notion`);
           setIsSyncing(false);
           return;
         }
       }
 
-      // Fallback a localStorage si estamos en GitHub Pages
-      const cached = localStorage.getItem('ig_planner_posts');
-      if (cached) {
-        setPosts(JSON.parse(cached));
-      }
+      // Si no hay backend (GitHub Pages), usar los datos frescos recién compilados
+      setPosts(notionPosts);
     } catch (err) {
       console.warn("Usando datos locales de respaldo:", err);
-      const cached = localStorage.getItem('ig_planner_posts');
-      if (cached) setPosts(JSON.parse(cached));
+      setPosts(notionPosts);
     } finally {
       setIsSyncing(false);
     }
