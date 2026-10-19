@@ -4,15 +4,21 @@ import FeedMatrixView from './components/FeedMatrixView.jsx';
 import TableView from './components/TableView.jsx';
 import PostModal from './components/PostModal.jsx';
 import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
-import { initialMockPosts } from './data/mockPosts.js';
+import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
-  const [posts, setPosts] = useState(initialMockPosts);
+  const [posts, setPosts] = useState(() => {
+    const cached = localStorage.getItem('ig_planner_posts');
+    if (cached) {
+      try { return JSON.parse(cached); } catch (e) {}
+    }
+    return notionPosts;
+  });
   const [activeView, setActiveView] = useState('calendar'); // 'calendar' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
   const [isSyncing, setIsSyncing] = useState(false);
-  const [notionStatus, setNotionStatus] = useState({ connected: false });
+  const [notionStatus, setNotionStatus] = useState({ connected: true });
   const [toast, setToast] = useState(null);
 
   // Modales
