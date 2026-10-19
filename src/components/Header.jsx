@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Table, RefreshCw, Plus, ChevronLeft, ChevronRight, LayoutGrid, CalendarDays } from 'lucide-react';
+import { Calendar, Table, RefreshCw, Plus, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
 
 export default function Header({
   activeView,
@@ -23,8 +23,8 @@ export default function Header({
   };
 
   return (
-    <header className="bg-black/70 backdrop-blur-md border-b border-[#232327] sticky top-0 z-30 px-6 py-3.5">
-      <div className="max-w-[1750px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <header className="bg-[#09090a]/90 backdrop-blur-md border-b border-[#232327] sticky top-0 z-30 px-6 py-4">
+      <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* Logo y título de marca Bitaxus */}
         <div className="flex items-center gap-3.5">
@@ -32,42 +32,42 @@ export default function Header({
             <img
               src="./logo.png"
               alt="Bitaxus"
-              className="h-7 w-auto object-contain"
+              className="h-8 w-auto object-contain"
               onError={(e) => {
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
               }}
             />
-            <div className="hidden w-8 h-8 rounded-lg bg-[#c1121f] text-white font-extrabold items-center justify-center text-base">
+            <div className="hidden w-8 h-8 rounded-lg bg-[#c1121f] text-white font-black items-center justify-center text-base">
               B
             </div>
           </div>
-          <div className="h-5 w-[1px] bg-[#2e2e33]"></div>
+          <div className="h-6 w-[1px] bg-[#232327]"></div>
           <div>
             <div className="flex items-center gap-2.5">
-              <h1 className="text-sm font-extrabold tracking-wider text-white uppercase font-sans">
-                PLANNER CONTENIDO FEED
+              <h1 className="text-sm font-black tracking-wider text-white uppercase font-sans">
+                PLANNER DE CONTENIDOS
               </h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#c1121f]/15 text-[#ff4d57] border border-[#c1121f]/30">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#c1121f]/15 text-[#ff4d57] border border-[#c1121f]/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ff4d57] animate-pulse"></span>
-                Bitaxus & Notion
+                Bitaxus · Instagram
               </span>
             </div>
             <p className="text-[11px] text-[#8b8b94] font-medium">
-              Calendario de publicación, guiones y banco de referentes
+              Feed mensual, copys aprobados y banco de láminas
             </p>
           </div>
         </div>
 
         {/* Controles de vista y semana */}
-        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
           
           {/* Selector de Semana con botones Anterior / Siguiente */}
-          <div className="flex items-center bg-[#18181b] p-1 rounded-xl border border-[#2e2e33]">
+          <div className="flex items-center bg-[#111113] p-1 rounded-xl border border-[#232327] shadow-inner">
             <button
               onClick={prevSemana}
               disabled={currentIdx <= 0}
-              className="p-1 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30"
+              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30 transition-colors"
               title="Semana anterior"
             >
               <ChevronLeft size={16} />
@@ -75,86 +75,86 @@ export default function Header({
             <select
               value={selectedSemana}
               onChange={(e) => setSelectedSemana(e.target.value)}
-              className="bg-[#111113] text-white text-xs font-bold rounded-lg px-2.5 py-1.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
+              className="bg-transparent text-white text-xs font-black rounded-lg px-3 py-1.5 focus:outline-none cursor-pointer"
             >
               {semanas.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s} className="bg-[#111113] text-white">{s}</option>
               ))}
-              <option value="todas">Todas las semanas</option>
+              <option value="todas" className="bg-[#111113] text-white">Todas las semanas</option>
             </select>
             <button
               onClick={nextSemana}
               disabled={currentIdx >= semanas.length - 1}
-              className="p-1 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30"
+              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30 transition-colors"
               title="Siguiente semana"
             >
               <ChevronRight size={16} />
             </button>
           </div>
 
-          {/* Toggle de 3 Vistas: Matriz Planner (Excel), Calendario Mensual, Tabla */}
-          <div className="flex items-center bg-[#18181b] p-1 rounded-xl border border-[#2e2e33]">
+          {/* Selector de Vistas: Feed Semanal, Calendario Mensual, Tabla */}
+          <div className="flex items-center bg-[#111113] p-1 rounded-xl border border-[#232327]">
             <button
               onClick={() => setActiveView('planner')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'planner'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
+                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
                   : 'text-[#8b8b94] hover:text-white'
               }`}
-              title="Vista idéntica a tu plantilla de Excel"
             >
-              <LayoutGrid size={13} />
-              <span>Planner Excel</span>
+              <LayoutGrid size={14} />
+              <span>Planner Semanal</span>
             </button>
 
             <button
               onClick={() => setActiveView('month')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'month'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
+                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
                   : 'text-[#8b8b94] hover:text-white'
               }`}
-              title="Vista de calendario mensual tradicional"
             >
-              <CalendarDays size={13} />
-              <span>Mes</span>
+              <Calendar size={14} />
+              <span>Calendario Mes</span>
             </button>
 
             <button
               onClick={() => setActiveView('table')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'table'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
+                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
                   : 'text-[#8b8b94] hover:text-white'
               }`}
-              title="Tabla detallada de guiones y entregas"
             >
-              <Table size={13} />
+              <Table size={14} />
               <span>Tabla</span>
             </button>
           </div>
 
-          {/* Botón Sincronizar Notion */}
+          {/* Botón Sincronizar con Notion */}
           <button
             onClick={onSync}
             disabled={isSyncing}
-            className="flex items-center gap-1.5 px-3 py-2 bg-[#18181b] hover:bg-[#202024] border border-[#2e2e33] text-white text-xs font-semibold rounded-xl transition-all disabled:opacity-50"
-            title="Sincronizar publicaciones desde Notion"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#18181b] hover:bg-[#202024] border border-[#2e2e33] text-xs font-bold text-white transition-all shadow-sm disabled:opacity-50"
+            title="Sincronizar posts con Notion"
           >
-            <RefreshCw size={13} className={isSyncing ? "animate-spin text-[#ff4d57]" : "text-[#8b8b94]"} />
-            <span className="hidden sm:inline">{isSyncing ? "Sincronizando..." : "Sincronizar"}</span>
+            <RefreshCw size={13} className={isSyncing ? 'animate-spin text-[#ff4d57]' : 'text-[#8b8b94]'} />
+            <span className="hidden sm:inline">
+              {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
+            </span>
           </button>
 
-          {/* Botón Nuevo Post */}
+          {/* Botón Nueva Pieza */}
           <button
             onClick={onNewPost}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#c1121f] hover:bg-[#d61a28] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#c1121f]/25 transition-all hover:scale-[1.02] uppercase tracking-wide"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#c1121f] to-[#d61a28] hover:from-[#d61a28] hover:to-[#e0202e] text-white text-xs font-black shadow-lg shadow-[#c1121f]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
-            <Plus size={14} />
-            <span>+ Nuevo</span>
+            <Plus size={15} />
+            <span>Nueva Pieza</span>
           </button>
 
         </div>
+
       </div>
     </header>
   );
