@@ -36,6 +36,9 @@ export default function App() {
       if (statusRes && statusRes.ok) {
         const statusData = await statusRes.json();
         setNotionStatus(statusData);
+      } else {
+        // En GitHub Pages / entorno estático
+        setNotionStatus({ connected: false, isStatic: true });
       }
 
       // 2. Posts
@@ -44,11 +47,22 @@ export default function App() {
         const postsData = await postsRes.json();
         if (Array.isArray(postsData) && postsData.length > 0) {
           setPosts(postsData);
+          localStorage.setItem('ig_planner_posts', JSON.stringify(postsData));
           showToast(`Sincronizadas ${postsData.length} piezas desde Notion`);
+          setIsSyncing(false);
+          return;
         }
+      }
+
+      // Fallback a localStorage si estamos en GitHub Pages
+      const cached = localStorage.getItem('ig_planner_posts');
+      if (cached) {
+        setPosts(JSON.parse(cached));
       }
     } catch (err) {
       console.warn("Usando datos locales de respaldo:", err);
+      const cached = localStorage.getItem('ig_planner_posts');
+      if (cached) setPosts(JSON.parse(cached));
     } finally {
       setIsSyncing(false);
     }
@@ -76,23 +90,25 @@ export default function App() {
         body: JSON.stringify(formData)
       });
 
-      if (res.ok) {
+      if (res && res.ok) {
         const savedPost = await res.json();
-        if (isUpdate) {
-          setPosts(prev => prev.map(p => p.id === savedPost.id ? savedPost : p));
-        } else {
-          setPosts(prev => [savedPost, ...prev]);
-        }
+        setPosts(prev => {
+          const next = isUpdate ? prev.map(p => p.id === savedPost.id ? savedPost : p) : [savedPost, ...prev];
+          localStorage.setItem('ig_planner_posts', JSON.stringify(next));
+          return next;
+        });
         showToast('Guardado y sincronizado con Notion con éxito');
       } else {
-        // Fallback actualización local
+        // Fallback actualización local / GitHub Pages
         const fakeId = formData.id || `local-${Date.now()}`;
         const updated = { ...formData, id: fakeId };
         setPosts(prev => {
           const exists = prev.some(p => p.id === fakeId);
-          return exists ? prev.map(p => p.id === fakeId ? updated : p) : [updated, ...prev];
+          const next = exists ? prev.map(p => p.id === fakeId ? updated : p) : [updated, ...prev];
+          localStorage.setItem('ig_planner_posts', JSON.stringify(next));
+          return next;
         });
-        showToast('Guardado localmente', 'info');
+        showToast('Guardado localmente en tu navegador', 'success');
       }
 
       setIsEditModalOpen(false);
