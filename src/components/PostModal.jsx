@@ -31,7 +31,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
     notasReferentes: '',
     fechaEntrega: '',
     linkEntrega: '',
-    responsable: 'Gabi',
+    responsable: 'Alejandra',
     observaciones: '',
     coverImage: ''
   });
@@ -64,7 +64,7 @@ export default function PostModal({ post, isOpen, onClose, onSave, isSaving }) {
         notasReferentes: '',
         fechaEntrega: '',
         linkEntrega: '',
-        responsable: 'Gabi',
+        responsable: 'Alejandra',
         observaciones: '',
         coverImage: ''
       });

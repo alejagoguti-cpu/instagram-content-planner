@@ -199,7 +199,7 @@ export default function TableView({
 
                 {/* Responsable */}
                 <td className="py-2.5 px-3 font-medium text-slate-300">
-                  {post.responsable || 'Gabi'}
+                  {post.responsable || 'Alejandra'}
                 </td>
 
                 {/* Acciones */}
