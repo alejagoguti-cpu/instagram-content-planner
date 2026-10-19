@@ -217,19 +217,16 @@ export default function FeedMatrixView({
                                       </div>
                                     )}
 
-                                    {/* Referente directo botón */}
-                                    {post.linkReferente && (
-                                      <div className="pt-1">
-                                        <button
-                                          onClick={() => onPreviewReferente(post)}
-                                          className="w-full py-1.5 px-2 rounded-lg bg-[#c1121f]/15 hover:bg-[#c1121f]/25 border border-[#c1121f]/35 text-[#ff4d57] hover:text-white text-[10px] font-bold flex items-center justify-center gap-1 transition-all"
-                                        >
-                                          <Play size={10} />
-                                          <span className="truncate">Ver Referente</span>
-                                          <ExternalLink size={10} />
-                                        </button>
-                                      </div>
-                                    )}
+                                    {/* Botón principal: Ver Copy & Board */}
+                                    <div className="pt-2">
+                                      <button
+                                        onClick={() => onPreviewReferente(post)}
+                                        className="w-full py-1.5 px-2.5 rounded-lg bg-[#c1121f] hover:bg-[#d61a28] text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-md shadow-[#c1121f]/20 transition-all uppercase tracking-wide"
+                                      >
+                                        <Play size={11} />
+                                        <span>Ver Copy & Board</span>
+                                      </button>
+                                    </div>
 
                                   </div>
 
