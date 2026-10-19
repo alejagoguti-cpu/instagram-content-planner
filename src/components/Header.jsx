@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Table, RefreshCw, Plus, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, Table, RefreshCw, Plus, ChevronLeft, ChevronRight, LayoutGrid, CalendarDays } from 'lucide-react';
 
 export default function Header({
   activeView,
@@ -12,8 +12,18 @@ export default function Header({
   notionStatus,
   onNewPost
 }) {
+  const currentIdx = semanas.indexOf(selectedSemana);
+
+  const prevSemana = () => {
+    if (currentIdx > 0) setSelectedSemana(semanas[currentIdx - 1]);
+  };
+
+  const nextSemana = () => {
+    if (currentIdx < semanas.length - 1) setSelectedSemana(semanas[currentIdx + 1]);
+  };
+
   return (
-    <header className="bg-black/60 backdrop-blur-md border-b border-[#232327] sticky top-0 z-30 px-6 py-3.5">
+    <header className="bg-black/70 backdrop-blur-md border-b border-[#232327] sticky top-0 z-30 px-6 py-3.5">
       <div className="max-w-[1750px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* Logo y título de marca Bitaxus */}
@@ -24,7 +34,6 @@ export default function Header({
               alt="Bitaxus"
               className="h-7 w-auto object-contain"
               onError={(e) => {
-                // Fallback si no carga el logo
                 e.target.style.display = 'none';
                 e.target.nextSibling.style.display = 'flex';
               }}
@@ -50,37 +59,67 @@ export default function Header({
           </div>
         </div>
 
-        {/* Controles y botones de acción estilo Bitaxus */}
+        {/* Controles de vista y semana */}
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
           
-          {/* Selector de Semana */}
-          <div className="flex items-center gap-2 bg-[#18181b] p-1 rounded-xl border border-[#2e2e33]">
-            <span className="text-[11px] font-semibold text-[#8b8b94] pl-2 uppercase tracking-wide">Semana:</span>
+          {/* Selector de Semana con botones Anterior / Siguiente */}
+          <div className="flex items-center bg-[#18181b] p-1 rounded-xl border border-[#2e2e33]">
+            <button
+              onClick={prevSemana}
+              disabled={currentIdx <= 0}
+              className="p-1 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30"
+              title="Semana anterior"
+            >
+              <ChevronLeft size={16} />
+            </button>
             <select
               value={selectedSemana}
               onChange={(e) => setSelectedSemana(e.target.value)}
-              className="bg-[#111113] text-white text-xs font-semibold rounded-lg px-3 py-1.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
+              className="bg-[#111113] text-white text-xs font-bold rounded-lg px-2.5 py-1.5 border border-[#2e2e33] focus:outline-none focus:border-[#c1121f]"
             >
               {semanas.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
               <option value="todas">Todas las semanas</option>
             </select>
+            <button
+              onClick={nextSemana}
+              disabled={currentIdx >= semanas.length - 1}
+              className="p-1 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30"
+              title="Siguiente semana"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
 
-          {/* Toggle de vistas: Calendario vs Tabla */}
+          {/* Toggle de 3 Vistas: Matriz Planner (Excel), Calendario Mensual, Tabla */}
           <div className="flex items-center bg-[#18181b] p-1 rounded-xl border border-[#2e2e33]">
             <button
-              onClick={() => setActiveView('calendar')}
+              onClick={() => setActiveView('planner')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                activeView === 'calendar'
+                activeView === 'planner'
                   ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
                   : 'text-[#8b8b94] hover:text-white'
               }`}
+              title="Vista idéntica a tu plantilla de Excel"
             >
-              <Calendar size={13} />
-              <span>Matriz Feed</span>
+              <LayoutGrid size={13} />
+              <span>Planner Excel</span>
             </button>
+
+            <button
+              onClick={() => setActiveView('month')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+                activeView === 'month'
+                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
+                  : 'text-[#8b8b94] hover:text-white'
+              }`}
+              title="Vista de calendario mensual tradicional"
+            >
+              <CalendarDays size={13} />
+              <span>Mes</span>
+            </button>
+
             <button
               onClick={() => setActiveView('table')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
@@ -88,9 +127,10 @@ export default function Header({
                   ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/20'
                   : 'text-[#8b8b94] hover:text-white'
               }`}
+              title="Tabla detallada de guiones y entregas"
             >
               <Table size={13} />
-              <span>Tabla Completa</span>
+              <span>Tabla</span>
             </button>
           </div>
 
@@ -111,7 +151,7 @@ export default function Header({
             className="flex items-center gap-1.5 px-4 py-2 bg-[#c1121f] hover:bg-[#d61a28] text-white text-xs font-bold rounded-xl shadow-lg shadow-[#c1121f]/25 transition-all hover:scale-[1.02] uppercase tracking-wide"
           >
             <Plus size={14} />
-            <span>+ Nuevo Post</span>
+            <span>+ Nuevo</span>
           </button>
 
         </div>

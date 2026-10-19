@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header.jsx';
 import FeedMatrixView from './components/FeedMatrixView.jsx';
+import CalendarMonthView from './components/CalendarMonthView.jsx';
 import TableView from './components/TableView.jsx';
 import PostModal from './components/PostModal.jsx';
 import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
@@ -15,7 +16,7 @@ export default function App() {
     }
     return notionPosts;
   });
-  const [activeView, setActiveView] = useState('calendar'); // 'calendar' | 'table'
+  const [activeView, setActiveView] = useState('planner'); // 'planner' | 'month' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
   const [isSyncing, setIsSyncing] = useState(false);
   const [notionStatus, setNotionStatus] = useState({ connected: true });
@@ -165,9 +166,9 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-[1700px] w-full mx-auto p-6 space-y-6">
+      <main className="flex-1 max-w-[1800px] w-full mx-auto p-4 sm:p-6 space-y-6">
         
-        {activeView === 'calendar' ? (
+        {activeView === 'planner' && (
           <FeedMatrixView
             posts={posts}
             selectedSemana={selectedSemana}
@@ -175,10 +176,18 @@ export default function App() {
               setCurrentEditPost(post);
               setIsEditModalOpen(true);
             }}
-            onNewPostWithDefaults={handleNewPostWithDefaults}
             onPreviewReferente={(post) => setPreviewPost(post)}
           />
-        ) : (
+        )}
+
+        {activeView === 'month' && (
+          <CalendarMonthView
+            posts={posts}
+            onPreviewReferente={(post) => setPreviewPost(post)}
+          />
+        )}
+
+        {activeView === 'table' && (
           <TableView
             posts={posts}
             onEditPost={(post) => {
