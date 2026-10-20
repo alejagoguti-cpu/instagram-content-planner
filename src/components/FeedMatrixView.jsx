@@ -11,6 +11,7 @@ export default function FeedMatrixView({
 }) {
   const [copiedId, setCopiedId] = useState(null);
   const [filterEtapa, setFilterEtapa] = useState('todas');
+  const [filterPilar, setFilterPilar] = useState('todos');
 
   const activeSemanas = selectedSemana === 'todas'
     ? Array.from(new Set(posts.map(p => p.semana))).sort()
@@ -21,6 +22,30 @@ export default function FeedMatrixView({
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const pilaresList = [
+    'todos',
+    'Cobros, Pagos y Tesorería',
+    'Bitaxus IA y Automatización',
+    'Bitaxus Global y Dólares Digitales',
+    'WhatsApp y Automatización',
+    'Crecimiento, Equipo y Delegación',
+    'Pioneros y Acceso Anticipado',
+    'Humor y Cultura Pop',
+    'Comercio, Domicilios y Puntos'
+  ];
+
+  const getPilarColor = (pilar) => {
+    const p = pilar || '';
+    if (p.includes('Global')) return 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
+    if (p.includes('IA')) return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+    if (p.includes('WhatsApp')) return 'text-green-400 border-green-500/30 bg-green-500/10';
+    if (p.includes('Pionero')) return 'text-amber-400 border-amber-500/30 bg-amber-500/10';
+    if (p.includes('Humor')) return 'text-pink-400 border-pink-500/30 bg-pink-500/10';
+    if (p.includes('Equipo') || p.includes('Crecimiento')) return 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10';
+    if (p.includes('Domicilio') || p.includes('Puntos')) return 'text-orange-400 border-orange-500/30 bg-orange-500/10';
+    return 'text-[#ff4d57] border-[#c1121f]/30 bg-[#c1121f]/10';
   };
 
   const getEtapaBadge = (etapa) => {
@@ -52,37 +77,59 @@ export default function FeedMatrixView({
   return (
     <div className="space-y-10">
       
-      {/* Barra de Filtros y Estadísticas de la Semana */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#111113] border border-[#232327] shadow-xl">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-[#8b8b94] uppercase tracking-wider">Filtrar Etapa:</span>
-          <div className="flex flex-wrap gap-1.5">
-            {['todas', 'Atracción', 'Validación', 'Venta'].map(et => (
-              <button
-                key={et}
-                onClick={() => setFilterEtapa(et)}
-                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-                  filterEtapa === et
-                    ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
-                    : 'bg-[#18181b] text-[#8b8b94] hover:text-white border border-[#2e2e33]'
-                }`}
-              >
-                {et === 'todas' ? 'Todas' : et}
-              </button>
-            ))}
+      {/* Barra de Filtros por Etapa y Pilar Temático */}
+      <div className="space-y-3 p-4 rounded-2xl bg-[#111113] border border-[#232327] shadow-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-[#8b8b94] uppercase tracking-wider">Etapa:</span>
+            <div className="flex flex-wrap gap-1.5">
+              {['todas', 'Atracción', 'Validación', 'Venta'].map(et => (
+                <button
+                  key={et}
+                  onClick={() => setFilterEtapa(et)}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    filterEtapa === et
+                      ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
+                      : 'bg-[#18181b] text-[#8b8b94] hover:text-white border border-[#2e2e33]'
+                  }`}
+                >
+                  {et === 'todas' ? 'Todas' : et}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs text-[#8b8b94]">
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-400"></span> Atracción
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-sky-400"></span> Validación
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#c1121f]"></span> Venta
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-[#8b8b94]">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span> Atracción
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-sky-400"></span> Validación
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#c1121f]"></span> Venta
-          </span>
+        {/* Filtro por Pilar Temático */}
+        <div className="pt-2 border-t border-[#232327] flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold text-[#8b8b94] uppercase tracking-wider">Pilar Temático:</span>
+          <div className="flex flex-wrap gap-1.5">
+            {pilaresList.map(pil => (
+              <button
+                key={pil}
+                onClick={() => setFilterPilar(pil)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  filterPilar === pil
+                    ? 'bg-white text-black shadow-md'
+                    : 'bg-[#18181b] text-[#8b8b94] hover:text-white border border-[#2e2e33]'
+                }`}
+              >
+                {pil === 'todos' ? 'Todos los pilares' : pil}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -90,6 +137,9 @@ export default function FeedMatrixView({
         const semanaPosts = posts.filter(p => {
           if (p.semana !== semana) return false;
           if (filterEtapa !== 'todas' && !p.etapa?.toLowerCase().includes(filterEtapa.toLowerCase())) {
+            return false;
+          }
+          if (filterPilar !== 'todos' && p.pilar !== filterPilar && p.producto !== filterPilar) {
             return false;
           }
           return true;
@@ -127,8 +177,13 @@ export default function FeedMatrixView({
               {DIAS_ORDEN.map((dia) => {
                 const postsDelDia = posts.filter(p => p.semana === semana && p.dia === dia);
                 const postsFiltrados = postsDelDia.filter(p => {
-                  if (filterEtapa === 'todas') return true;
-                  return p.etapa?.toLowerCase().includes(filterEtapa.toLowerCase());
+                  if (filterEtapa !== 'todas' && !p.etapa?.toLowerCase().includes(filterEtapa.toLowerCase())) {
+                    return false;
+                  }
+                  if (filterPilar !== 'todos' && p.pilar !== filterPilar && p.producto !== filterPilar) {
+                    return false;
+                  }
+                  return true;
                 });
 
                 const fechaDia = postsDelDia[0]?.fecha ? postsDelDia[0].fecha.split('-').slice(1).join('/') : '';
@@ -215,14 +270,12 @@ export default function FeedMatrixView({
                               <div className="p-3 flex-1 flex flex-col justify-between gap-2.5">
                                 
                                 <div>
-                                  {/* Tipo de Formato */}
-                                  <div className="flex items-center justify-between text-[10px] text-[#8b8b94] mb-1 font-semibold">
-                                    <span>{post.tipo || post.formato || 'Carrusel'}</span>
-                                    {post.producto && (
-                                      <span className="text-[#ff4d57] font-bold truncate max-w-[100px]">
-                                        {post.producto}
-                                      </span>
-                                    )}
+                                  {/* Pilar Temático y Formato */}
+                                  <div className="flex items-center justify-between text-[10px] mb-1.5 font-semibold gap-1">
+                                    <span className="text-[#8b8b94]">{post.tipo || post.formato || 'Carrusel'}</span>
+                                    <span className={`px-2 py-0.5 rounded text-[9px] font-black border truncate max-w-[130px] ${getPilarColor(post.pilar || post.producto)}`}>
+                                      {post.pilar || post.producto || 'Cobros'}
+                                    </span>
                                   </div>
 
                                   {/* Hook / Título Principal */}

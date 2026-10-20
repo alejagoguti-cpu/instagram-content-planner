@@ -10,8 +10,8 @@ import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
   const [posts, setPosts] = useState(() => {
-    // Si tenemos los posts estáticos actualizados de Notion, usarlos como fuente de verdad
-    const cached = localStorage.getItem('ig_planner_posts_v2');
+    // Usar la versión v3 que incluye los pilares temáticos balanceados y los captions de Instagram
+    const cached = localStorage.getItem('ig_planner_posts_v3');
     if (cached) {
       try { return JSON.parse(cached); } catch (e) {}
     }

@@ -2,18 +2,26 @@ import React, { useState } from 'react';
 import { X, ExternalLink, Play, Film, Copy, Check, FileText, Image as ImageIcon, Sparkles } from 'lucide-react';
 
 export default function ReferentePreviewModal({ post, onClose }) {
-  const [activeTab, setActiveTab] = useState('copy'); // 'copy' | 'board'
+  const [activeTab, setActiveTab] = useState('copy'); // 'copy' | 'caption' | 'board'
   const [copiedAll, setCopiedAll] = useState(false);
+  const [copiedCaption, setCopiedCaption] = useState(false);
   const [copiedSlide, setCopiedSlide] = useState(null);
 
   if (!post) return null;
 
   const fullCopy = post.copyAprobado || post.guionCopy || post.hook || "Sin copy registrado.";
+  const fullCaption = post.caption || "Sin caption registrado.";
 
   const handleCopyAll = () => {
     navigator.clipboard.writeText(fullCopy);
     setCopiedAll(true);
     setTimeout(() => setCopiedAll(false), 2000);
+  };
+
+  const handleCopyCaption = () => {
+    navigator.clipboard.writeText(fullCaption);
+    setCopiedCaption(true);
+    setTimeout(() => setCopiedCaption(false), 2000);
   };
 
   const handleCopySection = (text, idx) => {
@@ -98,7 +106,7 @@ export default function ReferentePreviewModal({ post, onClose }) {
           </button>
         </div>
 
-        {/* Pestañas: Copy de la Pieza vs Board Visual */}
+        {/* Pestañas: Copy de Láminas vs Caption de Publicación vs Board Visual */}
         <div className="flex items-center bg-[#18181b]/80 border-b border-[#232327] px-6">
           <button
             onClick={() => setActiveTab('copy')}
@@ -109,7 +117,19 @@ export default function ReferentePreviewModal({ post, onClose }) {
             }`}
           >
             <FileText size={14} className={activeTab === 'copy' ? 'text-[#ff4d57]' : ''} />
-            <span>Copy de la Pieza Nueva</span>
+            <span>Copy de Láminas</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('caption')}
+            className={`flex items-center gap-2 py-3 px-4 text-xs font-extrabold uppercase tracking-wider border-b-2 transition-all ${
+              activeTab === 'caption'
+                ? 'border-[#c1121f] text-white'
+                : 'border-transparent text-[#8b8b94] hover:text-white'
+            }`}
+          >
+            <Sparkles size={14} className={activeTab === 'caption' ? 'text-[#ff4d57]' : ''} />
+            <span>Caption de Publicación</span>
           </button>
 
           <button
@@ -197,6 +217,40 @@ export default function ReferentePreviewModal({ post, onClose }) {
                 </div>
               )}
 
+            </div>
+          )}
+
+          {/* TAB 2: CAPTION DE PUBLICACIÓN PARA INSTAGRAM */}
+          {activeTab === 'caption' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3.5 bg-black rounded-xl border border-[#2e2e33]">
+                <div>
+                  <span className="text-xs font-bold text-white block">Texto del Post de Instagram</span>
+                  <span className="text-[11px] text-[#8b8b94]">Listo para pegar en Instagram con gancho, llamado a la acción y hashtags</span>
+                </div>
+                <button
+                  onClick={handleCopyCaption}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#c1121f] hover:bg-[#d61a28] text-white text-xs font-bold shadow-md shadow-[#c1121f]/20 transition-all uppercase tracking-wide"
+                >
+                  {copiedCaption ? <Check size={14} /> : <Copy size={14} />}
+                  <span>{copiedCaption ? '¡Copiado!' : 'Copiar Caption'}</span>
+                </button>
+              </div>
+
+              <div className="p-5 rounded-xl bg-[#18181b] border border-[#2e2e33] space-y-3">
+                <div className="flex items-center justify-between border-b border-[#232327] pb-2">
+                  <span className="text-xs font-black text-[#ff4d57] uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles size={13} />
+                    Copy Descriptivo Aprobado
+                  </span>
+                  <span className="text-[10px] text-[#8b8b94] font-mono">
+                    {post.pilar || post.producto}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-200 whitespace-pre-line leading-relaxed font-sans bg-[#111113] p-4 rounded-lg border border-[#232327]">
+                  {fullCaption}
+                </div>
+              </div>
             </div>
           )}
 
