@@ -242,8 +242,8 @@ export default function FeedMatrixView({
 
                                 {/* Badge de Turno */}
                                 <div className="absolute top-2 left-2">
-                                  <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider backdrop-blur-md ${
-                                    isMañana ? 'bg-amber-500/80 text-black' : 'bg-indigo-600/80 text-white'
+                                  <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider backdrop-blur-md shadow ${
+                                    isMañana ? 'bg-amber-500/90 text-black' : 'bg-indigo-600/90 text-white'
                                   }`}>
                                     {isMañana ? '☀️ T1' : '🌙 T2'}
                                   </span>
@@ -251,7 +251,7 @@ export default function FeedMatrixView({
 
                                 {/* Badge de Etapa */}
                                 <div className="absolute top-2 right-2">
-                                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border backdrop-blur-md ${badge.bg}`}>
+                                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border backdrop-blur-md shadow ${badge.bg}`}>
                                     <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`}></span>
                                     {post.etapa || 'Atracción'}
                                   </span>
@@ -266,18 +266,18 @@ export default function FeedMatrixView({
                                 </div>
                               </div>
 
+                              {/* PILAR TEMÁTICO DESTACADO: Banner visible de ancho completo */}
+                              <div className="px-3 pt-2.5">
+                                <div className={`w-full px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wide border flex items-center justify-between ${getPilarColor(post.pilar || post.producto)}`}>
+                                  <span className="truncate">{post.pilar || post.producto || 'Cobros'}</span>
+                                  <span className="text-[9px] opacity-75 font-normal ml-1 shrink-0">{post.tipo || post.formato || 'Carrusel'}</span>
+                                </div>
+                              </div>
+
                               {/* Contenido / Metadata de la Tarjeta */}
-                              <div className="p-3 flex-1 flex flex-col justify-between gap-2.5">
+                              <div className="p-3 pt-2 flex-1 flex flex-col justify-between gap-2.5">
                                 
                                 <div>
-                                  {/* Pilar Temático y Formato */}
-                                  <div className="flex items-center justify-between text-[10px] mb-1.5 font-semibold gap-1">
-                                    <span className="text-[#8b8b94]">{post.tipo || post.formato || 'Carrusel'}</span>
-                                    <span className={`px-2 py-0.5 rounded text-[9px] font-black border truncate max-w-[130px] ${getPilarColor(post.pilar || post.producto)}`}>
-                                      {post.pilar || post.producto || 'Cobros'}
-                                    </span>
-                                  </div>
-
                                   {/* Hook / Título Principal */}
                                   <p className="text-xs font-bold text-white group-hover:text-[#ff4d57] line-clamp-2 leading-snug transition-colors">
                                     {post.hook || post.pieza}

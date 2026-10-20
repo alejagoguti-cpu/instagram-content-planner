@@ -9,14 +9,8 @@ import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function App() {
-  const [posts, setPosts] = useState(() => {
-    // Usar la versión v3 que incluye los pilares temáticos balanceados y los captions de Instagram
-    const cached = localStorage.getItem('ig_planner_posts_v3');
-    if (cached) {
-      try { return JSON.parse(cached); } catch (e) {}
-    }
-    return notionPosts;
-  });
+  // Siempre usar los datos empaquetados frescos de Notion
+  const [posts, setPosts] = useState(notionPosts);
   const [activeView, setActiveView] = useState('planner'); // 'planner' | 'month' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
   const [isSyncing, setIsSyncing] = useState(false);
@@ -39,13 +33,13 @@ export default function App() {
   const fetchStatusAndPosts = async () => {
     setIsSyncing(true);
     try {
+      localStorage.clear();
       // 1. Status
       const statusRes = await fetch('/api/status').catch(() => null);
       if (statusRes && statusRes.ok) {
         const statusData = await statusRes.json();
         setNotionStatus(statusData);
       } else {
-        // En GitHub Pages / entorno estático
         setNotionStatus({ connected: false, isStatic: true });
       }
 
@@ -55,22 +49,31 @@ export default function App() {
         const postsData = await postsRes.json();
         if (Array.isArray(postsData) && postsData.length > 0) {
           setPosts(postsData);
-          localStorage.setItem('ig_planner_posts_v2', JSON.stringify(postsData));
           showToast(`Sincronizadas ${postsData.length} piezas desde Notion`);
           setIsSyncing(false);
           return;
         }
       }
 
-      // Si no hay backend (GitHub Pages), usar los datos frescos recién compilados
       setPosts(notionPosts);
+      showToast("Datos de producción cargados correctamente");
     } catch (err) {
-      console.warn("Usando datos locales de respaldo:", err);
+      console.warn("Usando datos locales:", err);
       setPosts(notionPosts);
     } finally {
       setIsSyncing(false);
     }
   };
+
+  useEffect(() => {
+    // Limpiar cualquier cache viejo en el navegador del usuario al iniciar
+    try {
+      localStorage.removeItem('ig_planner_posts');
+      localStorage.removeItem('ig_planner_posts_v2');
+      localStorage.removeItem('ig_planner_posts_v3');
+    } catch (e) {}
+    setPosts(notionPosts);
+  }, []);
 
   useEffect(() => {
     fetchStatusAndPosts();
