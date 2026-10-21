@@ -8,6 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { SignedIn, SignedOut, SignIn } from '@clerk/clerk-react';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -182,7 +183,38 @@ export default function App() {
   const pinnedPosts = posts.filter(p => p.isPinned);
 
   return (
-    <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
+    <>
+      <SignedOut>
+        <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4 selection:bg-white selection:text-black">
+          <div className="w-full max-w-sm space-y-3 text-center mb-6">
+            <div className="flex items-center justify-center gap-2.5">
+              <img
+                src="./logo.png"
+                alt="Bitaxus"
+                className="h-7 w-auto object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="hidden w-7 h-7 rounded bg-zinc-800 text-white font-bold text-xs items-center justify-center">
+                B
+              </div>
+              <span className="text-sm font-semibold text-white tracking-tight">
+                Bitaxus Content
+              </span>
+            </div>
+            <p className="text-xs text-zinc-400">
+              Acceso exclusivo al equipo de producción y marketing. Inicia sesión para continuar.
+            </p>
+          </div>
+
+          <SignIn routing="hash" />
+        </div>
+      </SignedOut>
+
+      <SignedIn>
+        <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
       
       {/* Toast Notification */}
       {toast && (
@@ -305,6 +337,8 @@ export default function App() {
         onShowToast={showToast}
       />
 
-    </div>
+        </div>
+      </SignedIn>
+    </>
   );
 }

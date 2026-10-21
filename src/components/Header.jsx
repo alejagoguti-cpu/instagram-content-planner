@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight, LayoutGrid, Calendar, Table, RefreshCw, Plus, Mail } from 'lucide-react';
+import { UserButton } from '@clerk/clerk-react';
 
 export default function Header({
   activeView,
@@ -154,6 +155,10 @@ export default function Header({
           <Plus size={13} />
           <span>Nuevo post</span>
         </button>
+
+        <div className="pl-1 flex items-center">
+          <UserButton afterSignOutUrl="/" />
+        </div>
 
       </div>
 
