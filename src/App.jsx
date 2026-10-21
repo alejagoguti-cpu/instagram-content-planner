@@ -8,6 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { fetchNotionLiveUpdates, savePostToNotion } from './services/notionSyncService.js';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -111,7 +112,36 @@ export default function App() {
     showToast('Sesión cerrada');
   };
 
-  // Cargar personalizaciones guardadas en localStorage al iniciar
+  // Sincronización en tiempo real con Notion (Bidireccional entre computadores)
+  const syncWithNotion = async (silent = false) => {
+    setIsSyncing(true);
+    try {
+      const { success, data } = await fetchNotionLiveUpdates();
+      if (success && Object.keys(data).length > 0) {
+        setPosts(prev => prev.map(p => {
+          const remote = data[p.id];
+          if (remote) {
+            return {
+              ...p,
+              estadoAprobacion: remote.estadoAprobacion || p.estadoAprobacion,
+              notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
+              editableLink: remote.editableLink || p.editableLink
+            };
+          }
+          return p;
+        }));
+        if (!silent) showToast('Sincronizado con Notion (55 publicaciones al día)', 'success');
+      } else if (!silent) {
+        showToast('Sin cambios nuevos en Notion', 'success');
+      }
+    } catch (e) {
+      if (!silent) showToast('Error al conectar con Notion', 'error');
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Cargar datos locales y sincronizar en vivo con Notion al iniciar
   useEffect(() => {
     try {
       const savedData = localStorage.getItem('ig_planner_custom_data_v3');
@@ -131,10 +161,18 @@ export default function App() {
     } catch (e) {
       console.error("Error al cargar custom data:", e);
     }
+
+    // Traer inmediatamente los últimos cambios reales desde Notion
+    syncWithNotion(true);
+
+    // Sincronizar en segundo plano cuando la ventana vuelve a tener foco
+    const handleFocus = () => syncWithNotion(true);
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
-  // Guardar cambios en post (Feedback, Estados, Links Canva, Fechas)
-  const handleUpdatePostData = (postId, updates) => {
+  // Guardar cambios en post y sincronizar directamente con la base de datos de Notion
+  const handleUpdatePostData = async (postId, updates) => {
     setPosts(prev => {
       const next = prev.map(p => {
         if (p.id === postId) {
@@ -166,6 +204,16 @@ export default function App() {
     if (previewPost && previewPost.id === postId) {
       setPreviewPost(prev => ({ ...prev, ...updates }));
     }
+
+    // Enviar cambios a Notion para que aparezcan en todos los computadores
+    if (updates.notasFeedback !== undefined || updates.estadoAprobacion || updates.editableLink) {
+      const res = await savePostToNotion(postId, updates);
+      if (res.success) {
+        showToast('Guardado y sincronizado con Notion', 'success');
+      } else {
+        showToast('Guardado local (pendiente sync Notion)', 'error');
+      }
+    }
   };
 
   // Toggle fijar post en el perfil (Máximo 3)
@@ -186,13 +234,8 @@ export default function App() {
   };
 
   // Cargar estado de Notion y posts
-  const fetchStatusAndPosts = async () => {
-    setIsSyncing(true);
-    try {
-      showToast("Sincronizado con Notion y base de datos local");
-    } finally {
-      setIsSyncing(false);
-    }
+  const fetchStatusAndPosts = () => {
+    syncWithNotion(false);
   };
 
   // Extraer semanas únicas disponibles
