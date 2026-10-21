@@ -149,8 +149,13 @@ export default function CalendarMonthView({ posts, onPreviewReferente }) {
                             <div className="flex items-center gap-1.5 mb-0.5">
                               <span className={`w-1.5 h-1.5 rounded-full ${dot}`}></span>
                               <span className="text-[9px] font-bold text-[#8b8b94] uppercase tracking-wider">
-                                {isMañana ? '☀️ Mañana' : '🌙 Tarde'}
+                                {isMañana ? '☀️ T1' : '🌙 T2'}
                               </span>
+                              {p.pilar && (
+                                <span className="text-[8px] font-extrabold px-1.5 py-0.2 rounded bg-black/40 text-slate-300 truncate max-w-[90px]">
+                                  {p.pilar.replace('Bitaxus ', '').replace(' y ', '/')}
+                                </span>
+                              )}
                             </div>
                             <span className="text-[11px] font-bold text-white block truncate group-hover:text-[#ff4d57] leading-tight">
                               {p.hook || p.pieza}

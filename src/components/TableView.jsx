@@ -53,6 +53,7 @@ export default function TableView({
             <tr>
               <th className="py-3 px-3">Miniatura</th>
               <th className="py-3 px-3">Etapa</th>
+              <th className="py-3 px-3">Pilar Temático</th>
               <th className="py-3 px-3">Estado</th>
               <th className="py-3 px-3">Fecha</th>
               <th className="py-3 px-3">Producto</th>
@@ -97,6 +98,13 @@ export default function TableView({
                 <td className="py-2.5 px-3">
                   <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${getEtapaColor(post.etapa)}`}>
                     {post.etapa || 'Atracción'}
+                  </span>
+                </td>
+
+                {/* Pilar Temático */}
+                <td className="py-2.5 px-3 whitespace-nowrap">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-white/10 text-white border border-white/20">
+                    {post.pilar || post.producto || 'Cobros'}
                   </span>
                 </td>
 
