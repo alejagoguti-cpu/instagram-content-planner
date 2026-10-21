@@ -9,6 +9,13 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
   const [feedbackText, setFeedbackText] = useState(post?.notasFeedback || '');
   const [currentStatus, setCurrentStatus] = useState(post?.estadoAprobacion || 'Aprobado');
   const [savedFeedback, setSavedFeedback] = useState(false);
+  const [selectedAuthor, setSelectedAuthor] = useState(() => {
+    try {
+      return localStorage.getItem('bitaxus_feedback_author') || 'Alejandra Gómez';
+    } catch (e) {
+      return 'Alejandra Gómez';
+    }
+  });
 
   useEffect(() => {
     if (post) {
@@ -28,7 +35,15 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
 
   const handleSaveFeedback = () => {
     if (onUpdateEstado) {
-      onUpdateEstado(post.id, currentStatus, feedbackText);
+      let text = feedbackText.trim();
+      if (text && !text.startsWith('[')) {
+        text = `[${selectedAuthor}]: ${text}`;
+        setFeedbackText(text);
+      }
+      onUpdateEstado(post.id, currentStatus, text);
+      try {
+        localStorage.setItem('bitaxus_feedback_author', selectedAuthor);
+      } catch (e) {}
       setSavedFeedback(true);
       setTimeout(() => setSavedFeedback(false), 2000);
     }
@@ -262,6 +277,28 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
                   <span className="text-xs font-medium text-white block">Observaciones y solicitudes de cambio</span>
                   <span className="text-[10px] text-zinc-500 font-mono">socialmedia@bitaxus.com</span>
                 </div>
+
+                {/* Selector de Autor del Feedback */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 rounded bg-[#09090b] border border-white/[0.08]">
+                  <span className="text-[11px] text-zinc-400 font-medium">¿Quién comenta?</span>
+                  <div className="flex flex-wrap items-center gap-1">
+                    {['Alejandra Gómez', 'Alejandra Torres', 'Valentina', 'Laura'].map(author => (
+                      <button
+                        key={author}
+                        type="button"
+                        onClick={() => setSelectedAuthor(author)}
+                        className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                          selectedAuthor === author
+                            ? 'bg-white text-black font-semibold'
+                            : 'bg-white/[0.04] text-zinc-400 hover:text-white'
+                        }`}
+                      >
+                        {author}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <textarea
                   rows={4}
                   value={feedbackText}

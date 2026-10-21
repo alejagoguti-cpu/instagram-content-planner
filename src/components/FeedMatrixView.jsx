@@ -38,6 +38,13 @@ export default function FeedMatrixView({
   const [viewLayout, setViewLayout] = useState('grid'); // 'grid' | 'days' | 'pinned'
   const [cardFeedback, setCardFeedback] = useState({});
   const [savedFeedbackIds, setSavedFeedbackIds] = useState({});
+  const [selectedAuthor, setSelectedAuthor] = useState(() => {
+    try {
+      return localStorage.getItem('bitaxus_feedback_author') || 'Alejandra Gómez';
+    } catch (e) {
+      return 'Alejandra Gómez';
+    }
+  });
 
   const activeSemanas = selectedSemana === 'todas'
     ? Array.from(new Set(posts.map(p => p.semana))).sort()
@@ -53,7 +60,12 @@ export default function FeedMatrixView({
   const handleSaveCardFeedback = (postId) => {
     const text = cardFeedback[postId];
     if (text !== undefined) {
-      onUpdatePostData(postId, { notasFeedback: text });
+      let trimmed = text.trim();
+      if (trimmed && !trimmed.startsWith('[')) {
+        trimmed = `[${selectedAuthor}]: ${trimmed}`;
+        setCardFeedback(prev => ({ ...prev, [postId]: trimmed }));
+      }
+      onUpdatePostData(postId, { notasFeedback: trimmed });
       setSavedFeedbackIds(prev => ({ ...prev, [postId]: true }));
       setTimeout(() => {
         setSavedFeedbackIds(prev => ({ ...prev, [postId]: false }));
@@ -264,11 +276,29 @@ export default function FeedMatrixView({
 
             {/* Casilla de Notas / Feedback */}
             <div className="space-y-1 pt-1">
+              <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                <span className="text-zinc-500">Comenta:</span>
+                <select
+                  value={selectedAuthor}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSelectedAuthor(val);
+                    try { localStorage.setItem('bitaxus_feedback_author', val); } catch(err){}
+                  }}
+                  className="bg-[#0a0a0c] text-zinc-300 border border-white/[0.08] rounded px-1.5 py-0.5 text-[10px] focus:outline-none cursor-pointer"
+                >
+                  <option value="Alejandra Gómez">Alejandra Gómez</option>
+                  <option value="Alejandra Torres">Alejandra Torres</option>
+                  <option value="Valentina">Valentina</option>
+                  <option value="Laura">Laura</option>
+                </select>
+              </div>
+
               <textarea
                 rows={2}
                 value={cardFeedback[post.id] !== undefined ? cardFeedback[post.id] : (post.notasFeedback || '')}
                 onChange={(e) => setCardFeedback(prev => ({ ...prev, [post.id]: e.target.value }))}
-                placeholder="Escribir notas de corrección..."
+                placeholder={`Escribir nota como ${selectedAuthor}...`}
                 className="w-full bg-[#0a0a0c] border border-white/[0.08] focus:border-white/30 rounded p-2 text-[11px] text-zinc-200 placeholder-zinc-600 focus:outline-none resize-none"
               />
 

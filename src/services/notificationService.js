@@ -33,7 +33,7 @@ export const setNotificationWebhook = (url) => {
   } catch (e) {}
 };
 
-export const formatEmailPayload = (post, feedback, estado) => {
+export const formatEmailPayload = (post, feedback, estado, autor = 'Alejandra Gómez') => {
   const currentStatus = estado || post.estadoAprobacion || 'En corrección';
   const postName = post.pieza || post.hook || `Post ${post.id}`;
   const semana = post.semana || 'Semana 01';
@@ -43,14 +43,15 @@ export const formatEmailPayload = (post, feedback, estado) => {
   const fechaPublicacion = post.fecha || 'No definida';
   const fechaEntrega = post.fechaEntrega || 'No definida';
 
-  const subject = `[Bitaxus Planner] Feedback: ${postName} (${semana})`;
+  const subject = `[Bitaxus Planner] Feedback de ${autor}: ${postName} (${semana})`;
   
   const body = `Hola equipo Bitaxus,
 
-Se ha registrado una nueva observación para la siguiente pieza de contenido:
+Se ha registrado una nueva observación de ${autor} para la siguiente pieza de contenido:
 
 • Pieza: ${postName}
 • Semana: ${semana}
+• Autor del comentario: ${autor}
 • Pilar: ${pilar}
 • Estado: ${currentStatus}
 • Fecha Solicitud / Deadline: ${fechaEntrega}
@@ -71,15 +72,15 @@ Enviado automáticamente desde el Planificador de Contenido Bitaxus.`;
 };
 
 // Generar y abrir cliente de correo (Gmail, Outlook, Mail app)
-export const openMailClient = (post, feedback, estado) => {
+export const openMailClient = (post, feedback, estado, autor = 'Alejandra Gómez') => {
   const recipient = getNotificationEmail();
-  const { subject, body } = formatEmailPayload(post, feedback, estado);
+  const { subject, body } = formatEmailPayload(post, feedback, estado, autor);
   const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   window.open(mailtoUrl, '_blank');
 };
 
 // Formato limpio para compartir en WhatsApp o Slack
-export const formatWhatsAppText = (post, feedback, estado) => {
+export const formatWhatsAppText = (post, feedback, estado, autor = 'Alejandra Gómez') => {
   const currentStatus = estado || post.estadoAprobacion || 'En corrección';
   const postName = post.pieza || post.hook || `Post ${post.id}`;
   const semana = post.semana || 'Semana 01';
@@ -87,6 +88,7 @@ export const formatWhatsAppText = (post, feedback, estado) => {
 
   return `*Feedback Bitaxus Content*\n` +
     `*Pieza:* ${postName} (${semana})\n` +
+    `*Por:* ${autor}\n` +
     `*Estado:* ${currentStatus}\n` +
     `*Observación:* ${feedback || 'Revisión solicitada'}\n` +
     (canvaLink ? `*Canva:* ${canvaLink}\n` : '') +
@@ -94,13 +96,14 @@ export const formatWhatsAppText = (post, feedback, estado) => {
 };
 
 // Enviar notificación a webhook automático (Make, Zapier, Formspree si está configurado)
-export const sendWebhookNotification = async (post, feedback, estado) => {
+export const sendWebhookNotification = async (post, feedback, estado, autor = 'Alejandra Gómez') => {
   const webhookUrl = getNotificationWebhook();
   if (!webhookUrl) return { success: false, reason: 'no_webhook' };
 
   try {
     const payload = {
       destinatario: getNotificationEmail(),
+      autor,
       pieza: post.pieza || post.hook || post.id,
       semana: post.semana,
       estado: estado || post.estadoAprobacion,

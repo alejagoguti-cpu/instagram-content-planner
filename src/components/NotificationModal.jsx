@@ -14,6 +14,13 @@ import {
 export default function NotificationModal({ post, feedback, estado, isOpen, onClose, onShowToast }) {
   const [recipient, setRecipient] = useState(getNotificationEmail());
   const [webhook, setWebhook] = useState(getNotificationWebhook());
+  const [author, setAuthor] = useState(() => {
+    try {
+      return localStorage.getItem('bitaxus_feedback_author') || 'Alejandra Gómez';
+    } catch (e) {
+      return 'Alejandra Gómez';
+    }
+  });
   const [isEditingConfig, setIsEditingConfig] = useState(false);
   const [copiedWA, setCopiedWA] = useState(false);
   const [sendingWebhook, setSendingWebhook] = useState(false);
@@ -21,7 +28,14 @@ export default function NotificationModal({ post, feedback, estado, isOpen, onCl
   if (!isOpen || !post) return null;
 
   const currentStatus = estado || post.estadoAprobacion || 'En corrección';
-  const { subject, body } = formatEmailPayload(post, feedback, currentStatus);
+  const { subject, body } = formatEmailPayload(post, feedback, currentStatus, author);
+
+  const handleSelectAuthor = (newAuthor) => {
+    setAuthor(newAuthor);
+    try {
+      localStorage.setItem('bitaxus_feedback_author', newAuthor);
+    } catch (e) {}
+  };
 
   const handleSaveConfig = () => {
     setNotificationEmail(recipient);
@@ -31,12 +45,12 @@ export default function NotificationModal({ post, feedback, estado, isOpen, onCl
   };
 
   const handleOpenEmail = () => {
-    openMailClient(post, feedback, currentStatus);
-    if (onShowToast) onShowToast(`Abriendo cliente de correo para ${recipient}`);
+    openMailClient(post, feedback, currentStatus, author);
+    if (onShowToast) onShowToast(`Abriendo cliente de correo de ${author} para ${recipient}`);
   };
 
   const handleCopyWhatsApp = () => {
-    const text = formatWhatsAppText(post, feedback, currentStatus);
+    const text = formatWhatsAppText(post, feedback, currentStatus, author);
     navigator.clipboard.writeText(text);
     setCopiedWA(true);
     setTimeout(() => setCopiedWA(false), 2000);
@@ -49,7 +63,7 @@ export default function NotificationModal({ post, feedback, estado, isOpen, onCl
       return;
     }
     setSendingWebhook(true);
-    const result = await sendWebhookNotification(post, feedback, currentStatus);
+    const result = await sendWebhookNotification(post, feedback, currentStatus, author);
     setSendingWebhook(false);
     if (result.success) {
       if (onShowToast) onShowToast('Notificación enviada vía Webhook exitosamente');
@@ -132,6 +146,29 @@ export default function NotificationModal({ post, feedback, estado, isOpen, onCl
               </div>
             </div>
           )}
+
+          {/* Selector de Autor del Comentario */}
+          <div className="space-y-1.5">
+            <span className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider block">
+              ¿Quién escribe el comentario?
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              {['Alejandra Gómez', 'Alejandra Torres', 'Valentina', 'Laura'].map(person => (
+                <button
+                  key={person}
+                  type="button"
+                  onClick={() => handleSelectAuthor(person)}
+                  className={`py-1.5 px-2 rounded text-[11px] font-medium transition-colors border text-center ${
+                    author === person
+                      ? 'bg-white text-black border-white font-semibold'
+                      : 'bg-[#121215] text-zinc-400 border-white/[0.08] hover:text-white'
+                  }`}
+                >
+                  {person}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Details of the notification */}
           <div className="space-y-1.5">
