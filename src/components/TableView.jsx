@@ -3,6 +3,7 @@ import { ExternalLink, Palette, FileText } from 'lucide-react';
 
 export default function TableView({
   posts,
+  selectedSemana,
   onEditPost,
   onPreviewReferente,
   onUpdateEstado
@@ -12,7 +13,7 @@ export default function TableView({
       
       <div className="p-3.5 bg-[#151518] border-b border-white/[0.08] flex items-center justify-between">
         <h2 className="text-xs font-semibold text-white tracking-wider uppercase font-mono">
-          Tabla de Producción y Guiones ({posts.length} registros)
+          Tabla de Producción y Guiones · {selectedSemana === 'todas' ? 'Todas las semanas' : selectedSemana} ({posts.length} registros)
         </h2>
       </div>
 

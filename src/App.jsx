@@ -251,7 +251,8 @@ export default function App() {
 
         {activeView === 'table' && (
           <TableView
-            posts={posts}
+            posts={selectedSemana === 'todas' ? posts : posts.filter(p => p.semana === selectedSemana)}
+            selectedSemana={selectedSemana}
             onEditPost={(post) => {
               setCurrentEditPost(post);
               setIsEditModalOpen(true);

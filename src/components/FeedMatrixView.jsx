@@ -75,6 +75,11 @@ export default function FeedMatrixView({
 
   const filteredPosts = useMemo(() => {
     return posts.filter(p => {
+      // Filtrar por semana si se seleccionó una semana específica
+      if (selectedSemana && selectedSemana !== 'todas' && p.semana !== selectedSemana) {
+        return false;
+      }
+
       if (viewLayout === 'pinned' && !p.isPinned) return false;
 
       if (searchTerm.trim()) {
@@ -97,7 +102,7 @@ export default function FeedMatrixView({
       }
       return true;
     });
-  }, [posts, searchTerm, filterEtapa, filterPilar, filterAprobacion, viewLayout]);
+  }, [posts, selectedSemana, searchTerm, filterEtapa, filterPilar, filterAprobacion, viewLayout]);
 
   const hasActiveFilters = searchTerm !== '' || filterEtapa !== 'todas' || filterPilar !== 'todos' || filterAprobacion !== 'todos' || viewLayout !== 'grid';
 
@@ -471,8 +476,25 @@ export default function FeedMatrixView({
 
       {/* 3. Grid de Publicaciones */}
       {viewLayout === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredPosts.map(post => renderCard(post))}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-semibold text-zinc-300 uppercase tracking-wider font-mono">
+              {selectedSemana === 'todas' ? 'Todas las semanas' : selectedSemana}
+            </span>
+            <span className="text-xs text-zinc-500 font-mono">
+              {filteredPosts.length} publicaciones
+            </span>
+          </div>
+
+          {filteredPosts.length === 0 ? (
+            <div className="p-12 text-center text-xs text-zinc-500 bg-[#121215] rounded-md border border-white/[0.06]">
+              No hay publicaciones que coincidan con los filtros seleccionados para {selectedSemana}.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filteredPosts.map(post => renderCard(post))}
+            </div>
+          )}
         </div>
       )}
 
