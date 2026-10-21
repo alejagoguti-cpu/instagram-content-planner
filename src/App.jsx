@@ -7,8 +7,7 @@ import PostModal from './components/PostModal.jsx';
 import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
-import { SignedIn, SignedOut, SignIn, SignUp, useUser, SignOutButton } from '@clerk/clerk-react';
+import { CheckCircle2, AlertCircle, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -22,7 +21,24 @@ const calcularFechaEntrega = (fechaPub) => {
   }
 };
 
+const OFFICIAL_EMAIL = 'socialmedia@bitaxus.com';
+const OFFICIAL_PASS = 'Marketing123!';
+const AUTH_KEY = 'bitaxus_auth_session_v1';
+
 export default function App() {
+  // Estado de autenticación directa
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return localStorage.getItem(AUTH_KEY) === 'active';
+    } catch (e) {
+      return false;
+    }
+  });
+
+  const [passwordInput, setPasswordInput] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [authError, setAuthError] = useState('');
+
   // Inicializar posts combinando con campos de producción
   const [posts, setPosts] = useState(() => {
     return notionPosts.map((p, idx) => ({
@@ -37,7 +53,6 @@ export default function App() {
 
   const [activeView, setActiveView] = useState('planner'); // 'planner' | 'month' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
-  const [authMode, setAuthMode] = useState('sign-in'); // 'sign-in' | 'sign-up'
   const [isSyncing, setIsSyncing] = useState(false);
   const [notionStatus, setNotionStatus] = useState({ connected: true });
   const [toast, setToast] = useState(null);
@@ -69,6 +84,31 @@ export default function App() {
       feedback: feedback || (post ? post.notasFeedback : '') || '',
       estado: estado || (post ? post.estadoAprobacion : 'En corrección') || 'En corrección'
     });
+  };
+
+  // Login handler
+  const handleLogin = (e) => {
+    if (e) e.preventDefault();
+    if (passwordInput === OFFICIAL_PASS) {
+      try {
+        localStorage.setItem(AUTH_KEY, 'active');
+      } catch (err) {}
+      setIsAuthenticated(true);
+      setAuthError('');
+      showToast('Acceso concedido · Bienvenido al planificador');
+    } else {
+      setAuthError('Contraseña incorrecta. Por favor verifica e intenta nuevamente.');
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem(AUTH_KEY);
+    } catch (err) {}
+    setIsAuthenticated(false);
+    setPasswordInput('');
+    setAuthError('');
+    showToast('Sesión cerrada');
   };
 
   // Cargar personalizaciones guardadas en localStorage al iniciar
@@ -183,34 +223,25 @@ export default function App() {
   const aprobadosCount = posts.filter(p => (p.estadoAprobacion || 'Aprobado') === 'Aprobado').length;
   const pinnedPosts = posts.filter(p => p.isPinned);
 
-  const { user, isLoaded } = useUser();
-  const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase() || '';
-
-  // Validar autorización: cuenta socialmedia@bitaxus.com, dominio @bitaxus.com o autorizados
-  const isAuthorized =
-    !isLoaded ||
-    !user ||
-    userEmail === 'socialmedia@bitaxus.com' ||
-    userEmail.endsWith('@bitaxus.com') ||
-    userEmail.includes('aleja') ||
-    userEmail.includes('ontarget');
-
-  return (
-    <>
-      <SignedOut>
-        <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4 selection:bg-white selection:text-black">
-          <div className="w-full max-w-sm space-y-3 text-center mb-6">
+  // Vista de Login si no está autenticado
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4 selection:bg-white selection:text-black">
+        <div className="w-full max-w-sm space-y-6">
+          
+          {/* Logo y Encabezado */}
+          <div className="space-y-2 text-center">
             <div className="flex items-center justify-center gap-2.5">
               <img
                 src="./logo.png"
                 alt="Bitaxus"
-                className="h-7 w-auto object-contain"
+                className="h-8 w-auto object-contain"
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.nextSibling.style.display = 'flex';
                 }}
               />
-              <div className="hidden w-7 h-7 rounded bg-zinc-800 text-white font-bold text-xs items-center justify-center">
+              <div className="hidden w-8 h-8 rounded bg-zinc-800 text-white font-bold text-xs items-center justify-center">
                 B
               </div>
               <span className="text-sm font-semibold text-white tracking-tight">
@@ -218,72 +249,96 @@ export default function App() {
               </span>
             </div>
             <p className="text-xs text-zinc-400">
-              Acceso exclusivo al equipo de producción y marketing. Inicia sesión con la cuenta oficial <strong className="text-white">socialmedia@bitaxus.com</strong>.
+              Acceso exclusivo al equipo de producción y marketing.
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-1 bg-[#121215] p-1 rounded-md border border-white/[0.08] mb-4 text-xs font-medium">
-            <button
-              onClick={() => setAuthMode('sign-in')}
-              className={`px-3 py-1.5 rounded transition-colors ${
-                authMode === 'sign-in'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Iniciar sesión
-            </button>
-            <button
-              onClick={() => setAuthMode('sign-up')}
-              className={`px-3 py-1.5 rounded transition-colors ${
-                authMode === 'sign-up'
-                  ? 'bg-white text-black font-semibold'
-                  : 'text-zinc-400 hover:text-white'
-              }`}
-            >
-              Registrar cuenta (Primera vez)
-            </button>
-          </div>
-
-          {authMode === 'sign-in' ? (
-            <SignIn
-              routing="hash"
-              initialValues={{
-                emailAddress: 'socialmedia@bitaxus.com'
-              }}
-            />
-          ) : (
-            <SignUp
-              routing="hash"
-              initialValues={{
-                emailAddress: 'socialmedia@bitaxus.com'
-              }}
-            />
-          )}
-        </div>
-      </SignedOut>
-
-      <SignedIn>
-        {isLoaded && !isAuthorized ? (
-          <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4">
-            <div className="max-w-md w-full bg-[#121215] border border-white/10 p-6 rounded-lg text-center space-y-4">
-              <span className="text-[10px] uppercase tracking-wider font-mono text-amber-400">Acceso restringido</span>
-              <h2 className="text-sm font-semibold text-white">Cuenta no autorizada</h2>
-              <p className="text-xs text-zinc-400">
-                Has iniciado sesión con <span className="text-white font-mono">{userEmail}</span>.
-                El acceso a esta plataforma está reservado para la cuenta oficial <strong className="text-white">socialmedia@bitaxus.com</strong>.
-              </p>
-              <div className="pt-2">
-                <SignOutButton>
-                  <button className="px-4 py-2 rounded bg-white text-black text-xs font-medium hover:bg-zinc-200 transition-colors">
-                    Cerrar sesión e ingresar con socialmedia@bitaxus.com
-                  </button>
-                </SignOutButton>
-              </div>
+          {/* Tarjeta de Inicio de Sesión */}
+          <div className="bg-[#121215] border border-white/10 rounded-lg p-6 shadow-2xl space-y-4">
+            <div className="border-b border-white/[0.08] pb-3">
+              <h2 className="text-xs font-semibold text-white tracking-tight">Iniciar Sesión</h2>
+              <span className="text-[11px] text-zinc-500">Ingresa con tus credenciales asignadas</span>
             </div>
+
+            <form onSubmit={handleLogin} className="space-y-3.5">
+              
+              {/* Correo Electrónico (Fijado) */}
+              <div className="space-y-1">
+                <label className="text-[11px] font-medium text-zinc-400 block">
+                  Correo electrónico
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={OFFICIAL_EMAIL}
+                    readOnly
+                    className="w-full bg-[#09090b] border border-white/10 rounded px-3 py-2 text-xs font-mono text-zinc-300 focus:outline-none cursor-not-allowed select-none opacity-85"
+                  />
+                  <Lock size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                </div>
+              </div>
+
+              {/* Contraseña */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-medium text-zinc-400 block">
+                    Contraseña
+                  </label>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={passwordInput}
+                    onChange={(e) => {
+                      setPasswordInput(e.target.value);
+                      if (authError) setAuthError('');
+                    }}
+                    placeholder="Escribe tu contraseña..."
+                    autoFocus
+                    className="w-full bg-[#09090b] border border-white/10 focus:border-white/30 rounded px-3 py-2 text-xs text-white placeholder-zinc-600 focus:outline-none pr-9"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {authError && (
+                <div className="p-2.5 rounded bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[11px] flex items-center gap-2">
+                  <AlertCircle size={13} className="shrink-0 text-rose-400" />
+                  <span>{authError}</span>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full py-2 px-3 rounded bg-white text-zinc-950 font-medium text-xs hover:bg-zinc-200 transition-colors flex items-center justify-center gap-1.5 pt-2"
+              >
+                <span>Acceder al planificador</span>
+                <ArrowRight size={13} />
+              </button>
+
+            </form>
           </div>
-        ) : (
-          <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
+
+          <div className="text-center text-[11px] text-zinc-600 font-mono">
+            Bitaxus Content Machine · 2026
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  // Vista Principal cuando está autenticado
+  return (
+    <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
       
       {/* Toast Notification */}
       {toast && (
@@ -307,6 +362,7 @@ export default function App() {
         totalPosts={posts.length}
         aprobadosCount={aprobadosCount}
         onOpenNotificationConfig={() => handleOpenNotification(posts[0] || null, '', 'Aprobado')}
+        onLogout={handleLogout}
         onNewPost={() => {
           setCurrentEditPost(null);
           setIsEditModalOpen(true);
@@ -406,9 +462,6 @@ export default function App() {
         onShowToast={showToast}
       />
 
-          </div>
-        )}
-      </SignedIn>
-    </>
+    </div>
   );
 }

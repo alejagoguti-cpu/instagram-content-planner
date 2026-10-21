@@ -1,6 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight, LayoutGrid, Calendar, Table, RefreshCw, Plus, Mail } from 'lucide-react';
-import { UserButton } from '@clerk/clerk-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, Calendar, Table, RefreshCw, Plus, Mail, LogOut } from 'lucide-react';
 
 export default function Header({
   activeView,
@@ -13,7 +12,8 @@ export default function Header({
   onNewPost,
   totalPosts = 0,
   aprobadosCount = 0,
-  onOpenNotificationConfig
+  onOpenNotificationConfig,
+  onLogout
 }) {
   const currentIdx = semanas.indexOf(selectedSemana);
 
@@ -156,9 +156,15 @@ export default function Header({
           <span>Nuevo post</span>
         </button>
 
-        <div className="pl-1 flex items-center">
-          <UserButton afterSignOutUrl="/" />
-        </div>
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            className="p-1.5 rounded-md border border-white/[0.08] hover:bg-white/[0.06] text-zinc-400 hover:text-white transition-colors"
+            title="Cerrar sesión"
+          >
+            <LogOut size={13} />
+          </button>
+        )}
 
       </div>
 
