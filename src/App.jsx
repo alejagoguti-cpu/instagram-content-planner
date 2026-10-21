@@ -8,7 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
-import { SignedIn, SignedOut, SignIn, useUser, SignOutButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignIn, SignUp, useUser, SignOutButton } from '@clerk/clerk-react';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -37,6 +37,7 @@ export default function App() {
 
   const [activeView, setActiveView] = useState('planner'); // 'planner' | 'month' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
+  const [authMode, setAuthMode] = useState('sign-in'); // 'sign-in' | 'sign-up'
   const [isSyncing, setIsSyncing] = useState(false);
   const [notionStatus, setNotionStatus] = useState({ connected: true });
   const [toast, setToast] = useState(null);
@@ -221,12 +222,44 @@ export default function App() {
             </p>
           </div>
 
-          <SignIn
-            routing="hash"
-            initialValues={{
-              emailAddress: 'socialmedia@bitaxus.com'
-            }}
-          />
+          <div className="flex items-center justify-center gap-1 bg-[#121215] p-1 rounded-md border border-white/[0.08] mb-4 text-xs font-medium">
+            <button
+              onClick={() => setAuthMode('sign-in')}
+              className={`px-3 py-1.5 rounded transition-colors ${
+                authMode === 'sign-in'
+                  ? 'bg-white text-black font-semibold'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              Iniciar sesión
+            </button>
+            <button
+              onClick={() => setAuthMode('sign-up')}
+              className={`px-3 py-1.5 rounded transition-colors ${
+                authMode === 'sign-up'
+                  ? 'bg-white text-black font-semibold'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              Registrar cuenta (Primera vez)
+            </button>
+          </div>
+
+          {authMode === 'sign-in' ? (
+            <SignIn
+              routing="hash"
+              initialValues={{
+                emailAddress: 'socialmedia@bitaxus.com'
+              }}
+            />
+          ) : (
+            <SignUp
+              routing="hash"
+              initialValues={{
+                emailAddress: 'socialmedia@bitaxus.com'
+              }}
+            />
+          )}
         </div>
       </SignedOut>
 
