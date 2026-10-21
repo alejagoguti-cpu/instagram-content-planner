@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight, LayoutGrid, Calendar, Table, RefreshCw, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutGrid, Calendar, Table, RefreshCw, Plus, Mail } from 'lucide-react';
 
 export default function Header({
   activeView,
@@ -11,7 +11,8 @@ export default function Header({
   isSyncing,
   onNewPost,
   totalPosts = 0,
-  aprobadosCount = 0
+  aprobadosCount = 0,
+  onOpenNotificationConfig
 }) {
   const currentIdx = semanas.indexOf(selectedSemana);
 
@@ -128,6 +129,15 @@ export default function Header({
         </div>
 
         {/* Actions */}
+        <button
+          onClick={onOpenNotificationConfig}
+          className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-white/[0.08] hover:bg-white/[0.06] text-zinc-400 hover:text-white transition-colors text-[11px]"
+          title="Notificaciones automáticas a socialmedia@bitaxus.com"
+        >
+          <Mail size={12} className="text-zinc-400" />
+          <span className="font-mono text-[10px]">socialmedia@bitaxus.com</span>
+        </button>
+
         <button
           onClick={onSync}
           disabled={isSyncing}

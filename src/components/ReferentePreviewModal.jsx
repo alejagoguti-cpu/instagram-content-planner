@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, ExternalLink, Copy, Check, FileText, Palette, MessageSquare } from 'lucide-react';
+import { X, ExternalLink, Copy, Check, FileText, Palette, MessageSquare, Mail } from 'lucide-react';
 
-export default function ReferentePreviewModal({ post, onClose, onUpdateEstado }) {
+export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, onOpenNotification }) {
   const [activeTab, setActiveTab] = useState('copy'); // 'copy' | 'caption' | 'board' | 'feedback'
   const [copiedAll, setCopiedAll] = useState(false);
   const [copiedCaption, setCopiedCaption] = useState(false);
@@ -257,16 +257,26 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado })
 
           {activeTab === 'feedback' && (
             <div className="space-y-3">
-              <div className="p-3 rounded border border-white/[0.06] bg-black/40 space-y-2">
-                <span className="text-xs font-medium text-white block">Observaciones y solicitudes de cambio</span>
+              <div className="p-3.5 rounded border border-white/[0.06] bg-black/40 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-white block">Observaciones y solicitudes de cambio</span>
+                  <span className="text-[10px] text-zinc-500 font-mono">socialmedia@bitaxus.com</span>
+                </div>
                 <textarea
                   rows={4}
                   value={feedbackText}
                   onChange={(e) => setFeedbackText(e.target.value)}
-                  placeholder="Escribe comentarios de revisión..."
+                  placeholder="Escribe comentarios de revisión y corrección..."
                   className="w-full bg-[#09090b] border border-white/10 rounded p-3 text-xs text-zinc-200 focus:outline-none focus:border-white/30 resize-none"
                 />
-                <div className="flex justify-end pt-1">
+                <div className="flex items-center justify-between pt-1">
+                  <button
+                    onClick={() => onOpenNotification && onOpenNotification(post, feedbackText, currentStatus)}
+                    className="px-2.5 py-1.5 rounded border border-white/10 text-zinc-300 hover:text-white hover:bg-white/[0.04] text-xs font-medium transition-colors flex items-center gap-1.5"
+                  >
+                    <Mail size={12} className="text-zinc-400" />
+                    <span>Notificar correo</span>
+                  </button>
                   <button
                     onClick={handleSaveFeedback}
                     className="px-3 py-1.5 rounded bg-white text-black text-xs font-medium hover:bg-zinc-200 transition-colors"

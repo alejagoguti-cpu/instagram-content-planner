@@ -13,7 +13,8 @@ import {
   Calendar, 
   MessageSquare, 
   User, 
-  RotateCcw
+  RotateCcw,
+  Mail
 } from 'lucide-react';
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -26,7 +27,8 @@ export default function FeedMatrixView({
   onUpdatePostData,
   onEditPost,
   onPreviewReferente,
-  onUpdateEstado
+  onUpdateEstado,
+  onOpenNotification
 }) {
   const [copiedId, setCopiedId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -266,14 +268,28 @@ export default function FeedMatrixView({
               />
 
               <div className="flex items-center justify-between text-[10px]">
-                <button
-                  onClick={() => handleSaveCardFeedback(post.id)}
-                  className="text-zinc-400 hover:text-white font-medium"
-                >
-                  {isSavedFeedback ? 'Guardado' : 'Guardar nota'}
-                </button>
+                <div className="flex items-center gap-2.5">
+                  <button
+                    onClick={() => handleSaveCardFeedback(post.id)}
+                    className="text-zinc-400 hover:text-white font-medium"
+                  >
+                    {isSavedFeedback ? 'Guardado' : 'Guardar'}
+                  </button>
+                  <button
+                    onClick={() => onOpenNotification && onOpenNotification(
+                      post,
+                      cardFeedback[post.id] !== undefined ? cardFeedback[post.id] : post.notasFeedback,
+                      post.estadoAprobacion
+                    )}
+                    className="text-zinc-500 hover:text-zinc-200 flex items-center gap-1 transition-colors"
+                    title="Notificar por correo a socialmedia@bitaxus.com"
+                  >
+                    <Mail size={10} />
+                    <span>Notificar</span>
+                  </button>
+                </div>
                 {hasFeedback && (
-                  <span className="text-zinc-500">Con notas</span>
+                  <span className="text-zinc-500 font-mono">Con notas</span>
                 )}
               </div>
             </div>

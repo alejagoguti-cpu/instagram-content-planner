@@ -5,6 +5,7 @@ import CalendarMonthView from './components/CalendarMonthView.jsx';
 import TableView from './components/TableView.jsx';
 import PostModal from './components/PostModal.jsx';
 import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
+import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
@@ -45,10 +46,27 @@ export default function App() {
   const [previewPost, setPreviewPost] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Modal de notificación para socialmedia@bitaxus.com
+  const [notificationModalData, setNotificationModalData] = useState({
+    isOpen: false,
+    post: null,
+    feedback: '',
+    estado: ''
+  });
+
   // Helper para mostrar notificación
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
+  };
+
+  const handleOpenNotification = (post, feedback, estado) => {
+    setNotificationModalData({
+      isOpen: true,
+      post: post || posts[0] || null,
+      feedback: feedback || (post ? post.notasFeedback : '') || '',
+      estado: estado || (post ? post.estadoAprobacion : 'En corrección') || 'En corrección'
+    });
   };
 
   // Cargar personalizaciones guardadas en localStorage al iniciar
@@ -116,13 +134,13 @@ export default function App() {
     const pinnedCount = posts.filter(p => p.isPinned).length;
 
     if (!post.isPinned && pinnedCount >= 3) {
-      showToast('⚠️ Ya hay 3 posts fijados. Desfija uno primero.', 'error');
+      showToast('Ya hay 3 posts fijados. Desfija uno primero.', 'error');
       return;
     }
 
     const newPinned = !post.isPinned;
     handleUpdatePostData(postId, { isPinned: newPinned });
-    showToast(newPinned ? '📌 Post fijado en el perfil de Instagram' : 'Post desfijado del perfil', 'success');
+    showToast(newPinned ? 'Post fijado en el perfil de Instagram' : 'Post desfijado del perfil', 'success');
   };
 
   // Cargar estado de Notion y posts
@@ -187,6 +205,7 @@ export default function App() {
         notionStatus={notionStatus}
         totalPosts={posts.length}
         aprobadosCount={aprobadosCount}
+        onOpenNotificationConfig={() => handleOpenNotification(posts[0] || null, '', 'Aprobado')}
         onNewPost={() => {
           setCurrentEditPost(null);
           setIsEditModalOpen(true);
@@ -203,6 +222,7 @@ export default function App() {
             selectedSemana={selectedSemana}
             onTogglePin={handleTogglePin}
             onUpdatePostData={handleUpdatePostData}
+            onOpenNotification={handleOpenNotification}
             onEditPost={(post) => {
               setCurrentEditPost(post);
               setIsEditModalOpen(true);
@@ -264,6 +284,7 @@ export default function App() {
       <ReferentePreviewModal
         post={previewPost}
         onClose={() => setPreviewPost(null)}
+        onOpenNotification={handleOpenNotification}
         onUpdateEstado={(postId, newEstado, newFeedback) => {
           handleUpdatePostData(postId, {
             estadoAprobacion: newEstado,
@@ -271,6 +292,16 @@ export default function App() {
           });
           showToast(`Guardado: ${newEstado}`);
         }}
+      />
+
+      {/* Modal de Notificaciones a socialmedia@bitaxus.com */}
+      <NotificationModal
+        isOpen={notificationModalData.isOpen}
+        post={notificationModalData.post}
+        feedback={notificationModalData.feedback}
+        estado={notificationModalData.estado}
+        onClose={() => setNotificationModalData(prev => ({ ...prev, isOpen: false }))}
+        onShowToast={showToast}
       />
 
     </div>
