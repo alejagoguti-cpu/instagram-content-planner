@@ -65,14 +65,23 @@ export default function App() {
     }
   };
 
+  // Cargar estado guardado de aprobaciones si existe
   useEffect(() => {
-    // Limpiar cualquier cache viejo en el navegador del usuario al iniciar
     try {
-      localStorage.removeItem('ig_planner_posts');
-      localStorage.removeItem('ig_planner_posts_v2');
-      localStorage.removeItem('ig_planner_posts_v3');
+      const savedStatus = localStorage.getItem('ig_planner_custom_status');
+      if (savedStatus) {
+        const parsed = JSON.parse(savedStatus);
+        if (Array.isArray(parsed)) {
+          setPosts(prev => prev.map(p => {
+            const found = parsed.find(item => item.id === p.id);
+            if (found) {
+              return { ...p, estadoAprobacion: found.estadoAprobacion, notasFeedback: found.notasFeedback };
+            }
+            return p;
+          }));
+        }
+      }
     } catch (e) {}
-    setPosts(notionPosts);
   }, []);
 
   useEffect(() => {
@@ -177,6 +186,25 @@ export default function App() {
               setIsEditModalOpen(true);
             }}
             onPreviewReferente={(post) => setPreviewPost(post)}
+            onUpdateEstado={(postId, newEstado, newFeedback) => {
+              setPosts(prev => {
+                const updated = prev.map(p => {
+                  if (p.id === postId) {
+                    return {
+                      ...p,
+                      estadoAprobacion: newEstado,
+                      notasFeedback: newFeedback !== undefined ? newFeedback : (p.notasFeedback || '')
+                    };
+                  }
+                  return p;
+                });
+                try {
+                  localStorage.setItem('ig_planner_custom_status', JSON.stringify(updated.map(u => ({ id: u.id, estadoAprobacion: u.estadoAprobacion, notasFeedback: u.notasFeedback }))));
+                } catch (e) {}
+                return updated;
+              });
+              showToast(`Estado actualizado: ${newEstado}`);
+            }}
           />
         )}
 
@@ -184,6 +212,10 @@ export default function App() {
           <CalendarMonthView
             posts={posts}
             onPreviewReferente={(post) => setPreviewPost(post)}
+            onUpdateEstado={(postId, newEstado) => {
+              setPosts(prev => prev.map(p => p.id === postId ? { ...p, estadoAprobacion: newEstado } : p));
+              showToast(`Estado actualizado: ${newEstado}`);
+            }}
           />
         )}
 
@@ -195,6 +227,10 @@ export default function App() {
               setIsEditModalOpen(true);
             }}
             onPreviewReferente={(post) => setPreviewPost(post)}
+            onUpdateEstado={(postId, newEstado, newFeedback) => {
+              setPosts(prev => prev.map(p => p.id === postId ? { ...p, estadoAprobacion: newEstado, notasFeedback: newFeedback ?? p.notasFeedback } : p));
+              showToast(`Estado actualizado: ${newEstado}`);
+            }}
           />
         )}
 
@@ -215,6 +251,28 @@ export default function App() {
       <ReferentePreviewModal
         post={previewPost}
         onClose={() => setPreviewPost(null)}
+        onUpdateEstado={(postId, newEstado, newFeedback) => {
+          setPosts(prev => {
+            const updated = prev.map(p => {
+              if (p.id === postId) {
+                return {
+                  ...p,
+                  estadoAprobacion: newEstado,
+                  notasFeedback: newFeedback !== undefined ? newFeedback : (p.notasFeedback || '')
+                };
+              }
+              return p;
+            });
+            try {
+              localStorage.setItem('ig_planner_custom_status', JSON.stringify(updated.map(u => ({ id: u.id, estadoAprobacion: u.estadoAprobacion, notasFeedback: u.notasFeedback }))));
+            } catch (e) {}
+            return updated;
+          });
+          if (previewPost && previewPost.id === postId) {
+            setPreviewPost(prev => ({ ...prev, estadoAprobacion: newEstado, notasFeedback: newFeedback !== undefined ? newFeedback : (prev.notasFeedback || '') }));
+          }
+          showToast(`Estado guardado: ${newEstado}`);
+        }}
       />
 
     </div>

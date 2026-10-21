@@ -7,11 +7,13 @@ export default function FeedMatrixView({
   posts,
   selectedSemana,
   onEditPost,
-  onPreviewReferente
+  onPreviewReferente,
+  onUpdateEstado
 }) {
   const [copiedId, setCopiedId] = useState(null);
   const [filterEtapa, setFilterEtapa] = useState('todas');
   const [filterPilar, setFilterPilar] = useState('todos');
+  const [filterAprobacion, setFilterAprobacion] = useState('todos');
 
   const activeSemanas = selectedSemana === 'todas'
     ? Array.from(new Set(posts.map(p => p.semana))).sort()
@@ -22,6 +24,29 @@ export default function FeedMatrixView({
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const getAprobacionBadge = (estado) => {
+    const est = estado || 'Aprobado';
+    if (est === 'Aprobado') {
+      return {
+        bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        dot: 'bg-emerald-400',
+        label: 'Aprobado'
+      };
+    }
+    if (est === 'En corrección') {
+      return {
+        bg: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        dot: 'bg-amber-400',
+        label: 'En corrección'
+      };
+    }
+    return {
+      bg: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+      dot: 'bg-rose-400',
+      label: 'Desaprobado'
+    };
   };
 
   const pilaresList = [
@@ -131,6 +156,36 @@ export default function FeedMatrixView({
             ))}
           </div>
         </div>
+
+        {/* Filtro por Estado de Aprobación */}
+        <div className="pt-2 border-t border-[#232327] flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-[#8b8b94] uppercase tracking-wider">Aprobación:</span>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { id: 'todos', label: 'Todos' },
+                { id: 'Aprobado', label: '✅ Aprobado' },
+                { id: 'En corrección', label: '⚠️ En corrección' },
+                { id: 'Desaprobado', label: '❌ Desaprobado' }
+              ].map(st => (
+                <button
+                  key={st.id}
+                  onClick={() => setFilterAprobacion(st.id)}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                    filterAprobacion === st.id
+                      ? 'bg-[#c1121f] text-white shadow-md'
+                      : 'bg-[#18181b] text-[#8b8b94] hover:text-white border border-[#2e2e33]'
+                  }`}
+                >
+                  {st.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <span className="text-[11px] text-[#8b8b94] hidden sm:inline">
+            💡 Haz clic en el badge de aprobación de cada tarjeta para cambiar su estado
+          </span>
+        </div>
       </div>
 
       {activeSemanas.map((semana) => {
@@ -140,6 +195,9 @@ export default function FeedMatrixView({
             return false;
           }
           if (filterPilar !== 'todos' && p.pilar !== filterPilar && p.producto !== filterPilar) {
+            return false;
+          }
+          if (filterAprobacion !== 'todos' && (p.estadoAprobacion || 'Aprobado') !== filterAprobacion) {
             return false;
           }
           return true;
@@ -183,6 +241,9 @@ export default function FeedMatrixView({
                   if (filterPilar !== 'todos' && p.pilar !== filterPilar && p.producto !== filterPilar) {
                     return false;
                   }
+                  if (filterAprobacion !== 'todos' && (p.estadoAprobacion || 'Aprobado') !== filterAprobacion) {
+                    return false;
+                  }
                   return true;
                 });
 
@@ -214,8 +275,18 @@ export default function FeedMatrixView({
                       ) : (
                         postsFiltrados.map((post) => {
                           const badge = getEtapaBadge(post.etapa);
+                          const aprobBadge = getAprobacionBadge(post.estadoAprobacion);
                           const copyText = post.copyAprobado || post.guionCopy || post.hook || '';
                           const isMañana = post.turno?.includes('1');
+
+                          const toggleEstado = (e) => {
+                            e.stopPropagation();
+                            const current = post.estadoAprobacion || 'Aprobado';
+                            const next = current === 'Aprobado' ? 'En corrección' : (current === 'En corrección' ? 'Desaprobado' : 'Aprobado');
+                            if (onUpdateEstado) {
+                              onUpdateEstado(post.id, next);
+                            }
+                          };
 
                           return (
                             <div
@@ -249,12 +320,22 @@ export default function FeedMatrixView({
                                   </span>
                                 </div>
 
-                                {/* Badge de Etapa */}
-                                <div className="absolute top-2 right-2">
-                                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border backdrop-blur-md shadow ${badge.bg}`}>
+                                {/* Badges de Etapa y Aprobación */}
+                                <div className="absolute top-2 right-2 flex items-center gap-1">
+                                  <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-extrabold uppercase border backdrop-blur-md shadow ${badge.bg}`}>
                                     <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`}></span>
                                     {post.etapa || 'Atracción'}
                                   </span>
+
+                                  {/* Badge interactivo Aprobado / Desaprobado */}
+                                  <button
+                                    onClick={toggleEstado}
+                                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-black uppercase border backdrop-blur-md shadow transition-transform hover:scale-105 ${aprobBadge.bg}`}
+                                    title="Haz clic para cambiar estado (Aprobado / En corrección / Desaprobado)"
+                                  >
+                                    <span className={`w-1.5 h-1.5 rounded-full ${aprobBadge.dot}`}></span>
+                                    <span>{aprobBadge.label}</span>
+                                  </button>
                                 </div>
 
                                 {/* Hover Overlay: Botón grande de Ver Láminas */}
