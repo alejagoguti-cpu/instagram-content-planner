@@ -4,10 +4,12 @@
 const DATABASE_ID = '3fb92105-e196-812f-9af9-da2a1aed073f';
 
 const getNotionToken = () => {
-  if (typeof window !== 'undefined' && window.atob) {
-    try {
-      return window.atob('bnRuXzM5MjA4NzM5MjIyMnRXS2piWmxFQmJpVTExZXZvOHFlZXFkTVpkNXhwV0g3blM=');
-    } catch (e) {}
+  const b64 = 'bnRuXzM5MjA4NzM5MjIyMnRXS2piWmxFQmJpVTExZXZvOHFlZXFkTVpkNXhwV0g3blM=';
+  if (typeof atob === 'function') {
+    return atob(b64);
+  }
+  if (typeof Buffer !== 'undefined') {
+    return Buffer.from(b64, 'base64').toString('utf-8');
   }
   return '';
 };
