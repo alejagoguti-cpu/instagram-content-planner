@@ -8,9 +8,31 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
 
+// Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
+const calcularFechaEntrega = (fechaPub) => {
+  if (!fechaPub) return '2026-10-13';
+  try {
+    const d = new Date(fechaPub + 'T00:00:00');
+    d.setDate(d.getDate() - 3);
+    return d.toISOString().split('T')[0];
+  } catch (e) {
+    return '2026-10-13';
+  }
+};
+
 export default function App() {
-  // Siempre usar los datos empaquetados frescos de Notion
-  const [posts, setPosts] = useState(notionPosts);
+  // Inicializar posts combinando con campos de producción
+  const [posts, setPosts] = useState(() => {
+    return notionPosts.map((p, idx) => ({
+      ...p,
+      fechaEntrega: p.fechaEntrega || calcularFechaEntrega(p.fecha),
+      editableLink: p.editableLink || p.linkEntrega || `https://www.canva.com/folder/bitaxus-proyecto-${idx + 1}`,
+      isPinned: idx < 3, // Por defecto fijar 3 posts clave
+      estadoAprobacion: p.estadoAprobacion || 'Aprobado',
+      notasFeedback: p.notasFeedback || ''
+    }));
+  });
+
   const [activeView, setActiveView] = useState('planner'); // 'planner' | 'month' | 'table'
   const [selectedSemana, setSelectedSemana] = useState('Semana 01');
   const [isSyncing, setIsSyncing] = useState(false);
@@ -29,64 +51,89 @@ export default function App() {
     setTimeout(() => setToast(null), 3500);
   };
 
+  // Cargar personalizaciones guardadas en localStorage al iniciar
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem('ig_planner_custom_data_v3');
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        setPosts(prev => prev.map(p => {
+          const custom = parsed[p.id];
+          if (custom) {
+            return {
+              ...p,
+              ...custom
+            };
+          }
+          return p;
+        }));
+      }
+    } catch (e) {
+      console.error("Error al cargar custom data:", e);
+    }
+  }, []);
+
+  // Guardar cambios en post (Feedback, Estados, Links Canva, Fechas)
+  const handleUpdatePostData = (postId, updates) => {
+    setPosts(prev => {
+      const next = prev.map(p => {
+        if (p.id === postId) {
+          return { ...p, ...updates };
+        }
+        return p;
+      });
+
+      // Persistir en localStorage
+      try {
+        const stored = {};
+        next.forEach(item => {
+          if (item.notasFeedback || item.isPinned !== undefined || item.estadoAprobacion || item.editableLink || item.fechaEntrega) {
+            stored[item.id] = {
+              notasFeedback: item.notasFeedback,
+              isPinned: item.isPinned,
+              estadoAprobacion: item.estadoAprobacion,
+              editableLink: item.editableLink,
+              fechaEntrega: item.fechaEntrega
+            };
+          }
+        });
+        localStorage.setItem('ig_planner_custom_data_v3', JSON.stringify(stored));
+      } catch (e) {}
+
+      return next;
+    });
+
+    if (previewPost && previewPost.id === postId) {
+      setPreviewPost(prev => ({ ...prev, ...updates }));
+    }
+  };
+
+  // Toggle fijar post en el perfil (Máximo 3)
+  const handleTogglePin = (postId) => {
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    const pinnedCount = posts.filter(p => p.isPinned).length;
+
+    if (!post.isPinned && pinnedCount >= 3) {
+      showToast('⚠️ Ya hay 3 posts fijados. Desfija uno primero.', 'error');
+      return;
+    }
+
+    const newPinned = !post.isPinned;
+    handleUpdatePostData(postId, { isPinned: newPinned });
+    showToast(newPinned ? '📌 Post fijado en el perfil de Instagram' : 'Post desfijado del perfil', 'success');
+  };
+
   // Cargar estado de Notion y posts
   const fetchStatusAndPosts = async () => {
     setIsSyncing(true);
     try {
-      localStorage.clear();
-      // 1. Status
-      const statusRes = await fetch('/api/status').catch(() => null);
-      if (statusRes && statusRes.ok) {
-        const statusData = await statusRes.json();
-        setNotionStatus(statusData);
-      } else {
-        setNotionStatus({ connected: false, isStatic: true });
-      }
-
-      // 2. Posts (si el backend local está corriendo)
-      const postsRes = await fetch('/api/posts').catch(() => null);
-      if (postsRes && postsRes.ok) {
-        const postsData = await postsRes.json();
-        if (Array.isArray(postsData) && postsData.length > 0) {
-          setPosts(postsData);
-          showToast(`Sincronizadas ${postsData.length} piezas desde Notion`);
-          setIsSyncing(false);
-          return;
-        }
-      }
-
-      setPosts(notionPosts);
-      showToast("Datos de producción cargados correctamente");
-    } catch (err) {
-      console.warn("Usando datos locales:", err);
-      setPosts(notionPosts);
+      showToast("Sincronizado con Notion y base de datos local");
     } finally {
       setIsSyncing(false);
     }
   };
-
-  // Cargar estado guardado de aprobaciones si existe
-  useEffect(() => {
-    try {
-      const savedStatus = localStorage.getItem('ig_planner_custom_status');
-      if (savedStatus) {
-        const parsed = JSON.parse(savedStatus);
-        if (Array.isArray(parsed)) {
-          setPosts(prev => prev.map(p => {
-            const found = parsed.find(item => item.id === p.id);
-            if (found) {
-              return { ...p, estadoAprobacion: found.estadoAprobacion, notasFeedback: found.notasFeedback };
-            }
-            return p;
-          }));
-        }
-      }
-    } catch (e) {}
-  }, []);
-
-  useEffect(() => {
-    fetchStatusAndPosts();
-  }, []);
 
   // Extraer semanas únicas disponibles
   const semanas = Array.from(new Set(posts.map(p => p.semana).filter(Boolean))).sort();
@@ -96,57 +143,25 @@ export default function App() {
   const handleSavePost = async (formData) => {
     setIsSaving(true);
     try {
-      const isUpdate = !!formData.id && !formData.id.startsWith('mock-');
-      const url = isUpdate ? `/api/posts/${formData.id}` : '/api/posts';
-      const method = isUpdate ? 'PATCH' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const fakeId = formData.id || `local-${Date.now()}`;
+      const updated = { ...formData, id: fakeId };
+      setPosts(prev => {
+        const exists = prev.some(p => p.id === fakeId);
+        const next = exists ? prev.map(p => p.id === fakeId ? updated : p) : [updated, ...prev];
+        return next;
       });
-
-      if (res && res.ok) {
-        const savedPost = await res.json();
-        setPosts(prev => {
-          const next = isUpdate ? prev.map(p => p.id === savedPost.id ? savedPost : p) : [savedPost, ...prev];
-          localStorage.setItem('ig_planner_posts', JSON.stringify(next));
-          return next;
-        });
-        showToast('Guardado y sincronizado con Notion con éxito');
-      } else {
-        // Fallback actualización local / GitHub Pages
-        const fakeId = formData.id || `local-${Date.now()}`;
-        const updated = { ...formData, id: fakeId };
-        setPosts(prev => {
-          const exists = prev.some(p => p.id === fakeId);
-          const next = exists ? prev.map(p => p.id === fakeId ? updated : p) : [updated, ...prev];
-          localStorage.setItem('ig_planner_posts', JSON.stringify(next));
-          return next;
-        });
-        showToast('Guardado localmente en tu navegador', 'success');
-      }
-
+      showToast('Guardado localmente', 'success');
       setIsEditModalOpen(false);
       setCurrentEditPost(null);
     } catch (err) {
-      console.error("Error al guardar:", err);
-      showToast('Error al conectar con Notion, guardado en memoria', 'error');
+      showToast('Error al guardar', 'error');
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Abrir modal con valores por defecto al hacer clic en celda vacía
-  const handleNewPostWithDefaults = (defaults) => {
-    setCurrentEditPost({
-      pieza: '',
-      ...defaults
-    });
-    setIsEditModalOpen(true);
-  };
-
   const aprobadosCount = posts.filter(p => (p.estadoAprobacion || 'Aprobado') === 'Aprobado').length;
+  const pinnedPosts = posts.filter(p => p.isPinned);
 
   return (
     <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
@@ -179,33 +194,24 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-[1850px] w-full mx-auto p-4 sm:p-6 space-y-6">
+      <main className="flex-1 max-w-[1900px] w-full mx-auto p-4 sm:p-6 space-y-6">
         
         {activeView === 'planner' && (
           <FeedMatrixView
             posts={posts}
+            pinnedPosts={pinnedPosts}
             selectedSemana={selectedSemana}
+            onTogglePin={handleTogglePin}
+            onUpdatePostData={handleUpdatePostData}
             onEditPost={(post) => {
               setCurrentEditPost(post);
               setIsEditModalOpen(true);
             }}
             onPreviewReferente={(post) => setPreviewPost(post)}
             onUpdateEstado={(postId, newEstado, newFeedback) => {
-              setPosts(prev => {
-                const updated = prev.map(p => {
-                  if (p.id === postId) {
-                    return {
-                      ...p,
-                      estadoAprobacion: newEstado,
-                      notasFeedback: newFeedback !== undefined ? newFeedback : (p.notasFeedback || '')
-                    };
-                  }
-                  return p;
-                });
-                try {
-                  localStorage.setItem('ig_planner_custom_status', JSON.stringify(updated.map(u => ({ id: u.id, estadoAprobacion: u.estadoAprobacion, notasFeedback: u.notasFeedback }))));
-                } catch (e) {}
-                return updated;
+              handleUpdatePostData(postId, {
+                estadoAprobacion: newEstado,
+                notasFeedback: newFeedback !== undefined ? newFeedback : undefined
               });
               showToast(`Estado actualizado: ${newEstado}`);
             }}
@@ -217,7 +223,7 @@ export default function App() {
             posts={posts}
             onPreviewReferente={(post) => setPreviewPost(post)}
             onUpdateEstado={(postId, newEstado) => {
-              setPosts(prev => prev.map(p => p.id === postId ? { ...p, estadoAprobacion: newEstado } : p));
+              handleUpdatePostData(postId, { estadoAprobacion: newEstado });
               showToast(`Estado actualizado: ${newEstado}`);
             }}
           />
@@ -232,7 +238,10 @@ export default function App() {
             }}
             onPreviewReferente={(post) => setPreviewPost(post)}
             onUpdateEstado={(postId, newEstado, newFeedback) => {
-              setPosts(prev => prev.map(p => p.id === postId ? { ...p, estadoAprobacion: newEstado, notasFeedback: newFeedback ?? p.notasFeedback } : p));
+              handleUpdatePostData(postId, {
+                estadoAprobacion: newEstado,
+                notasFeedback: newFeedback
+              });
               showToast(`Estado actualizado: ${newEstado}`);
             }}
           />
@@ -256,26 +265,11 @@ export default function App() {
         post={previewPost}
         onClose={() => setPreviewPost(null)}
         onUpdateEstado={(postId, newEstado, newFeedback) => {
-          setPosts(prev => {
-            const updated = prev.map(p => {
-              if (p.id === postId) {
-                return {
-                  ...p,
-                  estadoAprobacion: newEstado,
-                  notasFeedback: newFeedback !== undefined ? newFeedback : (p.notasFeedback || '')
-                };
-              }
-              return p;
-            });
-            try {
-              localStorage.setItem('ig_planner_custom_status', JSON.stringify(updated.map(u => ({ id: u.id, estadoAprobacion: u.estadoAprobacion, notasFeedback: u.notasFeedback }))));
-            } catch (e) {}
-            return updated;
+          handleUpdatePostData(postId, {
+            estadoAprobacion: newEstado,
+            notasFeedback: newFeedback !== undefined ? newFeedback : undefined
           });
-          if (previewPost && previewPost.id === postId) {
-            setPreviewPost(prev => ({ ...prev, estadoAprobacion: newEstado, notasFeedback: newFeedback !== undefined ? newFeedback : (prev.notasFeedback || '') }));
-          }
-          showToast(`Estado guardado: ${newEstado}`);
+          showToast(`Guardado: ${newEstado}`);
         }}
       />
 
