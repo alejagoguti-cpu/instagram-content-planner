@@ -8,7 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle } from 'lucide-react';
-import { SignedIn, SignedOut, SignIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignIn, useUser, SignOutButton } from '@clerk/clerk-react';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -182,6 +182,18 @@ export default function App() {
   const aprobadosCount = posts.filter(p => (p.estadoAprobacion || 'Aprobado') === 'Aprobado').length;
   const pinnedPosts = posts.filter(p => p.isPinned);
 
+  const { user, isLoaded } = useUser();
+  const userEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase() || '';
+
+  // Validar autorización: cuenta socialmedia@bitaxus.com, dominio @bitaxus.com o autorizados
+  const isAuthorized =
+    !isLoaded ||
+    !user ||
+    userEmail === 'socialmedia@bitaxus.com' ||
+    userEmail.endsWith('@bitaxus.com') ||
+    userEmail.includes('aleja') ||
+    userEmail.includes('ontarget');
+
   return (
     <>
       <SignedOut>
@@ -205,16 +217,40 @@ export default function App() {
               </span>
             </div>
             <p className="text-xs text-zinc-400">
-              Acceso exclusivo al equipo de producción y marketing. Inicia sesión para continuar.
+              Acceso exclusivo al equipo de producción y marketing. Inicia sesión con la cuenta oficial <strong className="text-white">socialmedia@bitaxus.com</strong>.
             </p>
           </div>
 
-          <SignIn routing="hash" />
+          <SignIn
+            routing="hash"
+            initialValues={{
+              emailAddress: 'socialmedia@bitaxus.com'
+            }}
+          />
         </div>
       </SignedOut>
 
       <SignedIn>
-        <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
+        {isLoaded && !isAuthorized ? (
+          <div className="min-h-screen bg-[#09090b] flex flex-col items-center justify-center p-4">
+            <div className="max-w-md w-full bg-[#121215] border border-white/10 p-6 rounded-lg text-center space-y-4">
+              <span className="text-[10px] uppercase tracking-wider font-mono text-amber-400">Acceso restringido</span>
+              <h2 className="text-sm font-semibold text-white">Cuenta no autorizada</h2>
+              <p className="text-xs text-zinc-400">
+                Has iniciado sesión con <span className="text-white font-mono">{userEmail}</span>.
+                El acceso a esta plataforma está reservado para la cuenta oficial <strong className="text-white">socialmedia@bitaxus.com</strong>.
+              </p>
+              <div className="pt-2">
+                <SignOutButton>
+                  <button className="px-4 py-2 rounded bg-white text-black text-xs font-medium hover:bg-zinc-200 transition-colors">
+                    Cerrar sesión e ingresar con socialmedia@bitaxus.com
+                  </button>
+                </SignOutButton>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
       
       {/* Toast Notification */}
       {toast && (
@@ -337,7 +373,8 @@ export default function App() {
         onShowToast={showToast}
       />
 
-        </div>
+          </div>
+        )}
       </SignedIn>
     </>
   );
