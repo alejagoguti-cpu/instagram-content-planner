@@ -116,21 +116,35 @@ export default function App() {
   const syncWithNotion = async (silent = false) => {
     setIsSyncing(true);
     try {
-      const { success, data } = await fetchNotionLiveUpdates();
-      if (success && Object.keys(data).length > 0) {
-        setPosts(prev => prev.map(p => {
-          const remote = data[p.id];
-          if (remote) {
-            return {
-              ...p,
-              estadoAprobacion: remote.estadoAprobacion || p.estadoAprobacion,
-              notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
-              editableLink: remote.editableLink || p.editableLink
-            };
-          }
-          return p;
-        }));
-        if (!silent) showToast('Sincronizado con Notion (55 publicaciones al día)', 'success');
+      const { success, data, allNotionPosts } = await fetchNotionLiveUpdates();
+      if (success && allNotionPosts && allNotionPosts.length > 0) {
+        setPosts(prev => {
+          const prevMap = new Map(prev.map(p => [p.id, p]));
+
+          // Actualizar existentes
+          const updated = prev.map(p => {
+            const remote = data[p.id];
+            if (remote) {
+              return {
+                ...p,
+                estadoAprobacion: remote.estadoAprobacion || p.estadoAprobacion,
+                notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
+                editableLink: remote.editableLink || p.editableLink
+              };
+            }
+            return p;
+          });
+
+          // Detectar posts NUEVOS creados directamente en Notion y agregarlos al inicio
+          const newPostsFromNotion = allNotionPosts.filter(np => !prevMap.has(np.id));
+          const result = newPostsFromNotion.length > 0 ? [...newPostsFromNotion, ...updated] : updated;
+
+          return result;
+        });
+
+        if (!silent) {
+          showToast(`Sincronizado con Notion (${allNotionPosts.length} publicaciones)`, 'success');
+        }
       } else if (!silent) {
         showToast('Sin cambios nuevos en Notion', 'success');
       }

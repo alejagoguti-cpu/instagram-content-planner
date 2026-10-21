@@ -49,11 +49,12 @@ export const fetchNotionLiveUpdates = async () => {
 
     if (!res.ok) {
       console.warn('Error al consultar Notion API:', res.status);
-      return { success: false, data: {} };
+      return { success: false, data: {}, allNotionPosts: [] };
     }
 
     const data = await res.json();
     const updatesMap = {};
+    const allNotionPosts = [];
 
     (data.results || []).forEach(page => {
       const pageId = page.id;
@@ -61,19 +62,49 @@ export const fetchNotionLiveUpdates = async () => {
       const obsList = page.properties?.Observaciones?.rich_text || [];
       const observaciones = obsList.map(t => t.plain_text).join('\n').trim();
       const canvaLink = page.properties?.['Editable (Canva / Link)']?.url;
+      const pieza = page.properties?.Pieza?.title?.[0]?.plain_text || 'Publicación sin título';
+      const semana = page.properties?.Semana?.select?.name || 'Semana 01';
+      const dia = page.properties?.['Día']?.select?.name || 'Lunes';
+      const fecha = page.properties?.Fecha?.date?.start || '2026-10-21';
+      const fechaEntrega = page.properties?.['Fecha de Entrega']?.date?.start || '2026-10-18';
+      const turno = page.properties?.['Turno del Día']?.select?.name || 'Turno 1';
+      const pilar = page.properties?.['Pilar / Temática']?.select?.name || 'Bitaxus';
+      const etapa = page.properties?.Etapa?.select?.name || 'Atracción';
+      const hook = page.properties?.Hook?.rich_text?.[0]?.plain_text || pieza;
+      const guionCopy = page.properties?.['Guión / Copy']?.rich_text?.[0]?.plain_text || pieza;
+      const linkReferente = page.properties?.['Ficha Aprobada']?.url || page.url;
 
-      updatesMap[pageId] = {
+      const postObj = {
+        id: pageId,
+        pieza,
+        semana,
+        dia,
+        fecha,
+        fechaEntrega,
+        turno,
+        pilar,
+        producto: pilar,
+        etapa,
+        hook,
+        guionCopy,
+        copyAprobado: guionCopy,
+        caption: `${pieza}\n\nNueva publicación sincronizada directamente desde Notion.\n\n• • •\n#Bitaxus`,
+        linkReferente,
+        editableLink: canvaLink || `https://www.canva.com/folder/bitaxus-${pageId}`,
         estadoAprobacion: mapNotionStatusToLocal(estadoRaw),
         estadoNotionOriginal: estadoRaw,
         notasFeedback: observaciones || '',
-        editableLink: canvaLink || undefined
+        coverImage: page.cover?.file?.url || page.cover?.external?.url || null
       };
+
+      updatesMap[pageId] = postObj;
+      allNotionPosts.push(postObj);
     });
 
-    return { success: true, data: updatesMap };
+    return { success: true, data: updatesMap, allNotionPosts };
   } catch (err) {
     console.error('Fallo en sincronización Notion:', err);
-    return { success: false, data: {} };
+    return { success: false, data: {}, allNotionPosts: [] };
   }
 };
 
