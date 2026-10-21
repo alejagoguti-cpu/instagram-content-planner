@@ -146,12 +146,14 @@ export default function App() {
     setIsEditModalOpen(true);
   };
 
+  const aprobadosCount = posts.filter(p => (p.estadoAprobacion || 'Aprobado') === 'Aprobado').length;
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col selection:bg-[#c1121f] selection:text-white">
       
       {/* Toast Notification */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 shadow-2xl animate-fade-in text-xs font-semibold">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#141522] border border-white/10 text-slate-100 shadow-2xl animate-fade-in text-xs font-semibold backdrop-blur-md">
           {toast.type === 'success' && <CheckCircle2 size={16} className="text-emerald-400" />}
           {toast.type === 'error' && <AlertCircle size={16} className="text-rose-400" />}
           <span>{toast.message}</span>
@@ -168,6 +170,8 @@ export default function App() {
         onSync={fetchStatusAndPosts}
         isSyncing={isSyncing}
         notionStatus={notionStatus}
+        totalPosts={posts.length}
+        aprobadosCount={aprobadosCount}
         onNewPost={() => {
           setCurrentEditPost(null);
           setIsEditModalOpen(true);
@@ -175,7 +179,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-[1800px] w-full mx-auto p-4 sm:p-6 space-y-6">
+      <main className="flex-1 max-w-[1850px] w-full mx-auto p-4 sm:p-6 space-y-6">
         
         {activeView === 'planner' && (
           <FeedMatrixView

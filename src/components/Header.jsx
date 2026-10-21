@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Table, RefreshCw, Plus, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { Calendar, Table, RefreshCw, Plus, ChevronLeft, ChevronRight, LayoutGrid, CheckCircle2, Sparkles, Layers } from 'lucide-react';
 
 export default function Header({
   activeView,
@@ -10,7 +10,9 @@ export default function Header({
   onSync,
   isSyncing,
   notionStatus,
-  onNewPost
+  onNewPost,
+  totalPosts = 0,
+  aprobadosCount = 0
 }) {
   const currentIdx = semanas.indexOf(selectedSemana);
 
@@ -22,136 +24,149 @@ export default function Header({
     if (currentIdx < semanas.length - 1) setSelectedSemana(semanas[currentIdx + 1]);
   };
 
+  const percentApproved = totalPosts > 0 ? Math.round((aprobadosCount / totalPosts) * 100) : 0;
+
   return (
-    <header className="bg-[#09090a]/90 backdrop-blur-md border-b border-[#232327] sticky top-0 z-30 px-6 py-4">
-      <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <header className="bg-[#090a0f]/95 backdrop-blur-xl border-b border-white/[0.08] sticky top-0 z-40 px-4 sm:px-6 py-3.5 transition-all">
+      <div className="max-w-[1850px] mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         
-        {/* Logo y título de marca Bitaxus */}
+        {/* Brand & Title */}
         <div className="flex items-center gap-3.5">
-          <div className="flex items-center">
-            <img
-              src="./logo.png"
-              alt="Bitaxus"
-              className="h-8 w-auto object-contain"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-            <div className="hidden w-8 h-8 rounded-lg bg-[#c1121f] text-white font-black items-center justify-center text-base">
-              B
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#c1121f] to-rose-600 rounded-xl blur-sm opacity-50 group-hover:opacity-100 transition duration-300"></div>
+            <div className="relative flex items-center bg-[#11121a] p-1.5 rounded-xl border border-white/10">
+              <img
+                src="./logo.png"
+                alt="Bitaxus"
+                className="h-7 w-auto object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="hidden w-7 h-7 rounded-lg bg-[#c1121f] text-white font-black items-center justify-center text-sm">
+                B
+              </div>
             </div>
           </div>
-          <div className="h-6 w-[1px] bg-[#232327]"></div>
+
           <div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <h1 className="text-sm font-black tracking-wider text-white uppercase font-sans">
-                PLANNER DE CONTENIDOS
+                CONTENT STUDIO
               </h1>
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#c1121f]/15 text-[#ff4d57] border border-[#c1121f]/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ff4d57] animate-pulse"></span>
-                Bitaxus · Instagram
+                Vitaxus · Oct/Nov
+              </span>
+              <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-slate-300 border border-white/10">
+                {totalPosts} piezas
               </span>
             </div>
-            <p className="text-[11px] text-[#8b8b94] font-medium">
-              Feed mensual, copys aprobados y banco de láminas
+            <p className="text-[11px] text-[#8b8b94] font-medium flex items-center gap-1.5">
+              <span>Planificador estratégico de Instagram</span>
+              <span className="text-white/20">·</span>
+              <span className="text-emerald-400 font-semibold">{percentApproved}% Aprobado</span>
             </p>
           </div>
         </div>
 
-        {/* Controles de vista y semana */}
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+        {/* Center / Controls */}
+        <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-between lg:justify-end">
           
-          {/* Selector de Semana con botones Anterior / Siguiente */}
-          <div className="flex items-center bg-[#111113] p-1 rounded-xl border border-[#232327] shadow-inner">
+          {/* Week Selector with Navigation */}
+          <div className="flex items-center bg-[#12131c] p-1 rounded-xl border border-white/[0.08] shadow-inner">
             <button
               onClick={prevSemana}
               disabled={currentIdx <= 0}
-              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30 transition-colors"
+              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white hover:bg-white/5 disabled:opacity-25 transition-all"
               title="Semana anterior"
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={15} />
             </button>
+
             <select
               value={selectedSemana}
               onChange={(e) => setSelectedSemana(e.target.value)}
-              className="bg-transparent text-white text-xs font-black rounded-lg px-3 py-1.5 focus:outline-none cursor-pointer"
+              className="bg-transparent text-white text-xs font-bold rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer tracking-wide"
             >
               {semanas.map((s) => (
-                <option key={s} value={s} className="bg-[#111113] text-white">{s}</option>
+                <option key={s} value={s} className="bg-[#12131c] text-white">{s}</option>
               ))}
-              <option value="todas" className="bg-[#111113] text-white">Todas las semanas</option>
+              <option value="todas" className="bg-[#12131c] text-white">Todas las semanas</option>
             </select>
+
             <button
               onClick={nextSemana}
               disabled={currentIdx >= semanas.length - 1}
-              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white disabled:opacity-30 transition-colors"
+              className="p-1.5 rounded-lg text-[#8b8b94] hover:text-white hover:bg-white/5 disabled:opacity-25 transition-all"
               title="Siguiente semana"
             >
-              <ChevronRight size={16} />
+              <ChevronRight size={15} />
             </button>
           </div>
 
-          {/* Selector de Vistas: Feed Semanal, Calendario Mensual, Tabla */}
-          <div className="flex items-center bg-[#111113] p-1 rounded-xl border border-[#232327]">
+          {/* View Mode Selector */}
+          <div className="flex items-center bg-[#12131c] p-1 rounded-xl border border-white/[0.08]">
             <button
               onClick={() => setActiveView('planner')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'planner'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
-                  : 'text-[#8b8b94] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#c1121f] to-[#d61a28] text-white shadow-md shadow-[#c1121f]/30'
+                  : 'text-[#8b8b94] hover:text-white hover:bg-white/5'
               }`}
             >
-              <LayoutGrid size={14} />
-              <span>Planner Semanal</span>
+              <LayoutGrid size={13} />
+              <span>Planner</span>
             </button>
 
             <button
               onClick={() => setActiveView('month')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'month'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
-                  : 'text-[#8b8b94] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#c1121f] to-[#d61a28] text-white shadow-md shadow-[#c1121f]/30'
+                  : 'text-[#8b8b94] hover:text-white hover:bg-white/5'
               }`}
             >
-              <Calendar size={14} />
-              <span>Calendario Mes</span>
+              <Calendar size={13} />
+              <span>Mes</span>
             </button>
 
             <button
               onClick={() => setActiveView('table')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                 activeView === 'table'
-                  ? 'bg-[#c1121f] text-white shadow-lg shadow-[#c1121f]/30'
-                  : 'text-[#8b8b94] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#c1121f] to-[#d61a28] text-white shadow-md shadow-[#c1121f]/30'
+                  : 'text-[#8b8b94] hover:text-white hover:bg-white/5'
               }`}
             >
-              <Table size={14} />
+              <Table size={13} />
               <span>Tabla</span>
             </button>
           </div>
 
-          {/* Botón Sincronizar con Notion */}
-          <button
-            onClick={onSync}
-            disabled={isSyncing}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#18181b] hover:bg-[#202024] border border-[#2e2e33] text-xs font-bold text-white transition-all shadow-sm disabled:opacity-50"
-            title="Sincronizar posts con Notion"
-          >
-            <RefreshCw size={13} className={isSyncing ? 'animate-spin text-[#ff4d57]' : 'text-[#8b8b94]'} />
-            <span className="hidden sm:inline">
-              {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
-            </span>
-          </button>
+          {/* Sync & New Post Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onSync}
+              disabled={isSyncing}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#12131c] hover:bg-[#1a1b26] border border-white/[0.08] hover:border-white/20 text-xs font-semibold text-slate-200 transition-all shadow-sm disabled:opacity-50"
+              title="Sincronizar con Notion"
+            >
+              <RefreshCw size={13} className={isSyncing ? 'animate-spin text-[#ff4d57]' : 'text-[#8b8b94]'} />
+              <span className="hidden sm:inline">
+                {isSyncing ? 'Sincronizando' : 'Sincronizar'}
+              </span>
+            </button>
 
-          {/* Botón Nueva Pieza */}
-          <button
-            onClick={onNewPost}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-[#c1121f] to-[#d61a28] hover:from-[#d61a28] hover:to-[#e0202e] text-white text-xs font-black shadow-lg shadow-[#c1121f]/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Plus size={15} />
-            <span>Nueva Pieza</span>
-          </button>
+            <button
+              onClick={onNewPost}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#c1121f] to-[#e0202e] hover:from-[#d61a28] hover:to-[#ef233c] text-white text-xs font-black shadow-lg shadow-[#c1121f]/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Plus size={14} />
+              <span>Nueva Pieza</span>
+            </button>
+          </div>
 
         </div>
 
