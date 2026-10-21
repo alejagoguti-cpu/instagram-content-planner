@@ -126,3 +126,55 @@ export const sendWebhookNotification = async (post, feedback, estado, autor = 'A
     return { success: false, error: err.message };
   }
 };
+
+// Enviar notificación instantánea por correo electrónico sin pop-ups ni ventanas intermedias
+export const sendInstantEmailNotification = async ({ post, feedback, estado, autor }) => {
+  const email = getNotificationEmail() || DEFAULT_RECIPIENT;
+  const authorName = autor || (typeof localStorage !== 'undefined' ? localStorage.getItem('bitaxus_feedback_author') : '') || 'Alejandra Gómez';
+  const postTitle = post?.pieza || post?.hook || `Post ${post?.id || ''}`;
+  const semana = post?.semana || 'Semana 01';
+  const currentStatus = estado || post?.estadoAprobacion || 'En corrección';
+
+  const payload = {
+    _subject: `[Bitaxus Feedback] ${authorName}: ${postTitle} (${semana})`,
+    _captcha: 'false',
+    _template: 'table',
+    'Autor_del_comentario': authorName,
+    'Pieza_de_contenido': postTitle,
+    'Semana': semana,
+    'Estado_actual': currentStatus,
+    'Fecha_Limite_Entrega': post?.fechaEntrega || 'No definida',
+    'Fecha_Publicacion_Instagram': post?.fecha || 'No definida',
+    'Comentario_u_Observaciones': feedback || 'Sin comentarios adicionales',
+    'Enlace_Canva_Editable': post?.editableLink || 'N/A',
+    'Ficha_Referente_Notion': post?.linkReferente || 'N/A',
+    'Fecha_y_Hora_de_Envio': new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+  };
+
+  try {
+    // 1. Envío instantáneo por FormSubmit AJAX al correo socialmedia@bitaxus.com
+    fetch(`https://formsubmit.co/ajax/${email}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).catch(err => console.warn('Aviso FormSubmit:', err));
+
+    // 2. Si hay webhook configurado, dispararlo también en segundo plano
+    const webhookUrl = getNotificationWebhook();
+    if (webhookUrl) {
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(err => console.warn('Aviso Webhook:', err));
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error('Error enviando notificación automática:', err);
+    return { success: false, error: err.message };
+  }
+};

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ExternalLink, Copy, Check, FileText, Palette, MessageSquare, Mail } from 'lucide-react';
+import { sendInstantEmailNotification } from '../services/notificationService.js';
 
 export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, onOpenNotification }) {
   const [activeTab, setActiveTab] = useState('copy'); // 'copy' | 'caption' | 'board' | 'feedback'
@@ -44,8 +45,19 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
       try {
         localStorage.setItem('bitaxus_feedback_author', selectedAuthor);
       } catch (e) {}
+
+      // Enviar notificación instantánea a socialmedia@bitaxus.com en segundo plano
+      if (text) {
+        sendInstantEmailNotification({
+          post,
+          feedback: text,
+          estado: currentStatus,
+          autor: selectedAuthor
+        });
+      }
+
       setSavedFeedback(true);
-      setTimeout(() => setSavedFeedback(false), 2000);
+      setTimeout(() => setSavedFeedback(false), 2500);
     }
   };
 
@@ -307,18 +319,19 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
                   className="w-full bg-[#09090b] border border-white/10 rounded p-3 text-xs text-zinc-200 focus:outline-none focus:border-white/30 resize-none"
                 />
                 <div className="flex items-center justify-between pt-1">
-                  <button
-                    onClick={() => onOpenNotification && onOpenNotification(post, feedbackText, currentStatus)}
-                    className="px-2.5 py-1.5 rounded border border-white/10 text-zinc-300 hover:text-white hover:bg-white/[0.04] text-xs font-medium transition-colors flex items-center gap-1.5"
-                  >
-                    <Mail size={12} className="text-zinc-400" />
-                    <span>Notificar correo</span>
-                  </button>
+                  <span className="text-[11px] text-zinc-500 font-mono">
+                    socialmedia@bitaxus.com
+                  </span>
                   <button
                     onClick={handleSaveFeedback}
-                    className="px-3 py-1.5 rounded bg-white text-black text-xs font-medium hover:bg-zinc-200 transition-colors"
+                    className={`px-3.5 py-1.5 rounded transition-colors text-xs font-medium flex items-center gap-1.5 ${
+                      savedFeedback
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        : 'bg-white text-black hover:bg-zinc-200'
+                    }`}
                   >
-                    {savedFeedback ? 'Guardado' : 'Guardar nota'}
+                    <Mail size={12} />
+                    <span>{savedFeedback ? 'Guardado y notificado' : 'Guardar y notificar al correo'}</span>
                   </button>
                 </div>
               </div>

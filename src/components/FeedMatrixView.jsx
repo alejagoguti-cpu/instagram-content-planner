@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Mail
 } from 'lucide-react';
+import { sendInstantEmailNotification } from '../services/notificationService.js';
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
@@ -59,7 +60,8 @@ export default function FeedMatrixView({
 
   const handleSaveCardFeedback = (postId) => {
     const text = cardFeedback[postId];
-    if (text !== undefined) {
+    const post = posts.find(p => p.id === postId);
+    if (text !== undefined && post) {
       let trimmed = text.trim();
       if (trimmed && !trimmed.startsWith('[')) {
         trimmed = `[${selectedAuthor}]: ${trimmed}`;
@@ -69,7 +71,17 @@ export default function FeedMatrixView({
       setSavedFeedbackIds(prev => ({ ...prev, [postId]: true }));
       setTimeout(() => {
         setSavedFeedbackIds(prev => ({ ...prev, [postId]: false }));
-      }, 2000);
+      }, 2500);
+
+      // Enviar notificación instantánea a socialmedia@bitaxus.com en segundo plano
+      if (trimmed) {
+        sendInstantEmailNotification({
+          post,
+          feedback: trimmed,
+          estado: post.estadoAprobacion,
+          autor: selectedAuthor
+        });
+      }
     }
   };
 
@@ -303,26 +315,18 @@ export default function FeedMatrixView({
               />
 
               <div className="flex items-center justify-between text-[10px]">
-                <div className="flex items-center gap-2.5">
-                  <button
-                    onClick={() => handleSaveCardFeedback(post.id)}
-                    className="text-zinc-400 hover:text-white font-medium"
-                  >
-                    {isSavedFeedback ? 'Guardado' : 'Guardar'}
-                  </button>
-                  <button
-                    onClick={() => onOpenNotification && onOpenNotification(
-                      post,
-                      cardFeedback[post.id] !== undefined ? cardFeedback[post.id] : post.notasFeedback,
-                      post.estadoAprobacion
-                    )}
-                    className="text-zinc-500 hover:text-zinc-200 flex items-center gap-1 transition-colors"
-                    title="Notificar por correo a socialmedia@bitaxus.com"
-                  >
-                    <Mail size={10} />
-                    <span>Notificar</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => handleSaveCardFeedback(post.id)}
+                  className={`px-2.5 py-1 rounded transition-colors font-medium flex items-center gap-1.5 ${
+                    isSavedFeedback
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      : 'bg-white text-black hover:bg-zinc-200'
+                  }`}
+                  title="Guardar comentario y notificar inmediatamente a socialmedia@bitaxus.com"
+                >
+                  <Mail size={10} />
+                  <span>{isSavedFeedback ? 'Guardado y notificado' : 'Guardar y notificar'}</span>
+                </button>
                 {hasFeedback && (
                   <span className="text-zinc-500 font-mono">Con notas</span>
                 )}
