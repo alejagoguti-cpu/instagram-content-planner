@@ -166,9 +166,11 @@ export default function App() {
         setPosts(prev => prev.map(p => {
           const custom = parsed[p.id];
           if (custom) {
+            // El link de Canva siempre sale de los datos publicados, no del navegador
+            const { editableLink: _ignorado, ...resto } = custom;
             return {
               ...p,
-              ...custom
+              ...resto
             };
           }
           return p;
