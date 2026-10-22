@@ -90,7 +90,7 @@ export const fetchNotionLiveUpdates = async () => {
         copyAprobado: guionCopy,
         caption: `${pieza}\n\nNueva publicación sincronizada directamente desde Notion.\n\n• • •\n#Bitaxus`,
         linkReferente,
-        editableLink: canvaLink || `https://www.canva.com/folder/bitaxus-${pageId}`,
+        editableLink: canvaLink || null,
         estadoAprobacion: mapNotionStatusToLocal(estadoRaw),
         estadoNotionOriginal: estadoRaw,
         notasFeedback: observaciones || '',

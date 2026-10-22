@@ -136,7 +136,9 @@ export default function App() {
           });
 
           // Detectar posts NUEVOS creados directamente en Notion y agregarlos al inicio
-          const newPostsFromNotion = allNotionPosts.filter(np => !prevMap.has(np.id));
+          const newPostsFromNotion = allNotionPosts
+            .filter(np => !prevMap.has(np.id))
+            .map(np => ({ ...np, editableLink: np.editableLink || `https://www.canva.com/folder/bitaxus-${np.id}` }));
           const result = newPostsFromNotion.length > 0 ? [...newPostsFromNotion, ...updated] : updated;
 
           return result;
