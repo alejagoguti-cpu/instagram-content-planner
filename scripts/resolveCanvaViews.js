@@ -70,6 +70,16 @@ async function main() {
       page.properties?.['Vista (Canva / Link)']?.url,
       page.properties?.['Editable (Canva / Link)']?.url,
     ].filter(Boolean);
+    // Link de Canva de la historia (texto en la propiedad Historias)
+    const historia = (page.properties?.Historias?.rich_text || []).map((t) => t.plain_text).join('').trim();
+    if (/^https:\/\//.test(historia)) {
+      try {
+        const viewH = await resolveLink(historia);
+        if (viewH) views[page.id + '#h'] = viewH;
+      } catch (err) {
+        console.warn('No se pudo resolver la historia ' + historia + ': ' + err.message);
+      }
+    }
     for (const link of candidates) {
       try {
         const view = await resolveLink(link);

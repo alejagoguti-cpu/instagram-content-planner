@@ -134,6 +134,7 @@ export default function App() {
                 fecha: remote.fechaNotion || p.fecha,
                 fechaEntrega: remote.fechaEntregaNotion || p.fechaEntrega,
                 dia: remote.diaNotion || p.dia,
+                historiaLink: remote.historiaLink || p.historiaLink,
                 notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
                 editableLink: remote.editableLink || p.editableLink,
                 viewLink: remote.viewLink || canvaViews[p.id] || (remote.editableLink ? null : p.viewLink)
@@ -232,7 +233,7 @@ export default function App() {
     }
 
     // Enviar cambios a Notion para que aparezcan en todos los computadores
-    if (updates.notasFeedback !== undefined || updates.estadoAprobacion || updates.editableLink || updates.semana || updates.fecha || updates.fechaEntrega || updates.dia) {
+    if (updates.notasFeedback !== undefined || updates.estadoAprobacion || updates.editableLink || updates.semana || updates.fecha || updates.fechaEntrega || updates.dia || updates.historiaLink) {
       const res = await savePostToNotion(postId, updates);
       if (res.success) {
         showToast('Guardado y sincronizado con Notion', 'success');

@@ -9,6 +9,7 @@ import {
   Eye, 
   LayoutGrid, 
   Columns, 
+  Smartphone, 
   Clock, 
   Calendar, 
   MessageSquare, 
@@ -17,6 +18,7 @@ import {
   Mail
 } from 'lucide-react';
 import CardPreview from './CardPreview.jsx';
+import StoriesGrid from './StoriesGrid.jsx';
 import { sendInstantEmailNotification } from '../services/notificationService.js';
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -544,18 +546,22 @@ export default function FeedMatrixView({
             </button>
 
             <button
-              onClick={() => setViewLayout('days')}
+              onClick={() => setViewLayout('historias')}
               className={`p-1 rounded transition-colors ${
-                viewLayout === 'days' ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-zinc-300'
+                viewLayout === 'historias' ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-zinc-300'
               }`}
-              title="Vista por días de la semana"
+              title="Vista de historias"
             >
-              <Columns size={14} />
+              <Smartphone size={14} />
             </button>
           </div>
         </div>
 
       </div>
+
+      {viewLayout === 'historias' && (
+        <StoriesGrid posts={filteredPosts} onUpdatePostData={onUpdatePostData} />
+      )}
 
       {/* 3. Grid de Publicaciones */}
       {viewLayout === 'grid' && (

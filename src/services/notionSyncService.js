@@ -97,6 +97,7 @@ export const fetchNotionLiveUpdates = async () => {
         linkReferente,
         editableLink: canvaLink || null,
         viewLink: page.properties?.['Vista (Canva / Link)']?.url || null,
+        historiaLink: ((page.properties?.Historias?.rich_text || []).map(t => t.plain_text).join('').trim().match(/^https?:\/\/\S+$/) || [null])[0],
         fechaNotion: page.properties?.Fecha?.date?.start || null,
         fechaEntregaNotion: page.properties?.['Fecha de Entrega']?.date?.start || null,
         diaNotion: page.properties?.['Día']?.select?.name || null,
@@ -157,6 +158,13 @@ export const savePostToNotion = async (postId, updates) => {
     }
     if (updates.fechaEntrega) {
       propertiesToUpdate['Fecha de Entrega'] = { date: { start: updates.fechaEntrega } };
+    }
+
+    // Link de Canva de la historia (se guarda como texto en la propiedad Historias)
+    if (updates.historiaLink) {
+      propertiesToUpdate['Historias'] = {
+        rich_text: [{ text: { content: updates.historiaLink } }]
+      };
     }
 
     // 4. Mover el post de semana
