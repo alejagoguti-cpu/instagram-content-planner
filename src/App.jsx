@@ -136,7 +136,7 @@ export default function App() {
                 dia: remote.diaNotion || p.dia,
                 notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
                 editableLink: remote.editableLink || p.editableLink,
-                viewLink: remote.viewLink || p.viewLink
+                viewLink: remote.viewLink || canvaViews[p.id] || (remote.editableLink ? null : p.viewLink)
               };
             }
             return p;

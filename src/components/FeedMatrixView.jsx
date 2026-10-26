@@ -275,6 +275,24 @@ export default function FeedMatrixView({
                 <span>Canva editable</span>
               </a>
 
+              <button
+                type="button"
+                onClick={() => {
+                  const actual = /canva\.(com|link)/.test(post.editableLink || '') ? post.editableLink : '';
+                  const nuevo = window.prompt('Pega el link de Canva de este post (se guarda en Notion y se muestra en la vista previa):', actual);
+                  if (!nuevo) return;
+                  if (!/^https:\/\/(www\.)?canva\.(com|link)\//.test(nuevo.trim())) {
+                    window.alert('Pega un link de Canva (canva.com o canva.link).');
+                    return;
+                  }
+                  onUpdatePostData(post.id, { editableLink: nuevo.trim(), viewLink: null });
+                }}
+                className="py-1 px-2 rounded border border-white/[0.08] hover:border-white/20 text-zinc-300 hover:text-white text-[10px] font-medium transition-colors"
+                title="Pegar o cambiar el link de Canva (se guarda en Notion)"
+              >
+                + Link
+              </button>
+
               {post.linkReferente && (
                 <a
                   href={post.linkReferente}
