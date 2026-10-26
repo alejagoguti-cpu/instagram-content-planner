@@ -27,7 +27,7 @@ export default function NotificationModal({ post, feedback, estado, isOpen, onCl
 
   if (!isOpen || !post) return null;
 
-  const currentStatus = estado || post.estadoAprobacion || 'En corrección';
+  const currentStatus = estado || post.estadoAprobacion || 'En proceso';
   const { subject, body } = formatEmailPayload(post, feedback, currentStatus, author);
 
   const handleSelectAuthor = (newAuthor) => {

@@ -34,7 +34,7 @@ export const setNotificationWebhook = (url) => {
 };
 
 export const formatEmailPayload = (post, feedback, estado, autor = 'Alejandra Gómez') => {
-  const currentStatus = estado || post.estadoAprobacion || 'En corrección';
+  const currentStatus = estado || post.estadoAprobacion || 'En proceso';
   const postName = post.pieza || post.hook || `Post ${post.id}`;
   const semana = post.semana || 'Semana 01';
   const pilar = post.pilar || post.producto || 'Bitaxus';
@@ -81,7 +81,7 @@ export const openMailClient = (post, feedback, estado, autor = 'Alejandra Gómez
 
 // Formato limpio para compartir en WhatsApp o Slack
 export const formatWhatsAppText = (post, feedback, estado, autor = 'Alejandra Gómez') => {
-  const currentStatus = estado || post.estadoAprobacion || 'En corrección';
+  const currentStatus = estado || post.estadoAprobacion || 'En proceso';
   const postName = post.pieza || post.hook || `Post ${post.id}`;
   const semana = post.semana || 'Semana 01';
   const canvaLink = post.editableLink || post.linkEntrega || '';
@@ -133,7 +133,7 @@ export const sendInstantEmailNotification = async ({ post, feedback, estado, aut
   const authorName = autor || (typeof localStorage !== 'undefined' ? localStorage.getItem('bitaxus_feedback_author') : '') || 'Alejandra Gómez';
   const postTitle = post?.pieza || post?.hook || `Post ${post?.id || ''}`;
   const semana = post?.semana || 'Semana 01';
-  const currentStatus = estado || post?.estadoAprobacion || 'En corrección';
+  const currentStatus = estado || post?.estadoAprobacion || 'En proceso';
 
   const payload = {
     _subject: `[Bitaxus Feedback] ${authorName}: ${postTitle} (${semana})`,

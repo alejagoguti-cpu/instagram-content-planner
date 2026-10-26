@@ -55,7 +55,7 @@ export default function TableView({
                   <td className="py-2 px-3">
                     <button
                       onClick={() => {
-                        const next = currentStatus === 'Aprobado' ? 'En corrección' : (currentStatus === 'En corrección' ? 'Desaprobado' : 'Aprobado');
+                        const next = currentStatus === 'Aprobado' ? 'En proceso' : (currentStatus === 'En proceso' ? 'Corrección' : 'Aprobado');
                         if (onUpdateEstado) onUpdateEstado(post.id, next);
                       }}
                       className="px-2 py-0.5 rounded text-[10px] font-medium border border-white/10 hover:border-white/30 text-zinc-300"

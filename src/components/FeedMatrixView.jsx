@@ -43,6 +43,7 @@ export default function FeedMatrixView({
   onOpenNotification
 }) {
   const [copiedId, setCopiedId] = useState(null);
+  const semanasDisponibles = Array.from(new Set(posts.map(p => p.semana).filter(Boolean))).sort();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEtapa, setFilterEtapa] = useState('todas');
   const [filterPilar, setFilterPilar] = useState('todos');
@@ -194,7 +195,7 @@ export default function FeedMatrixView({
 
               <span className={`px-2 py-0.5 rounded text-[10px] font-medium backdrop-blur-sm border ${
                 currentStatus === 'Aprobado' ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/50' :
-                currentStatus === 'En corrección' ? 'bg-amber-950/60 text-amber-300 border-amber-800/50' :
+                currentStatus === 'En proceso' ? 'bg-amber-950/60 text-amber-300 border-amber-800/50' :
                 'bg-rose-950/60 text-rose-300 border-rose-800/50'
               }`}>
                 {currentStatus}
@@ -272,7 +273,7 @@ export default function FeedMatrixView({
 
             {/* Selector de Estado */}
             <div className="grid grid-cols-3 gap-1 pt-1">
-              {['Aprobado', 'En corrección', 'Desaprobado'].map(st => (
+              {['Aprobado', 'En proceso', 'Corrección'].map(st => (
                 <button
                   key={st}
                   onClick={() => onUpdateEstado(post.id, st)}
@@ -344,6 +345,17 @@ export default function FeedMatrixView({
             <User size={11} />
             <span>{post.responsable || 'Alejandra'}</span>
           </span>
+
+          <select
+            value={post.semana || ''}
+            onChange={(e) => onUpdatePostData(post.id, { semana: e.target.value })}
+            title="Mover este post a otra semana (se guarda en Notion)"
+            className="bg-[#0a0a0c] text-zinc-400 border border-white/[0.08] rounded px-1 py-0.5 text-[10px] focus:outline-none cursor-pointer"
+          >
+            {semanasDisponibles.map(sem => (
+              <option key={sem} value={sem}>Mover: {sem}</option>
+            ))}
+          </select>
 
           <button
             onClick={(e) => handleCopy(copyText, post.id, e)}
@@ -456,8 +468,8 @@ export default function FeedMatrixView({
           >
             <option value="todos">Todos los estados</option>
             <option value="Aprobado">Aprobado</option>
-            <option value="En corrección">En corrección</option>
-            <option value="Desaprobado">Desaprobado</option>
+            <option value="En proceso">En proceso</option>
+            <option value="Corrección">Corrección</option>
           </select>
 
           {/* Pilar */}

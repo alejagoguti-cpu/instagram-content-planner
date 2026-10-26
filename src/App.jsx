@@ -8,7 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
-import { fetchNotionLiveUpdates, savePostToNotion } from './services/notionSyncService.js';
+import { fetchNotionLiveUpdates, savePostToNotion, normalizeEstado } from './services/notionSyncService.js';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
 const calcularFechaEntrega = (fechaPub) => {
@@ -83,7 +83,7 @@ export default function App() {
       isOpen: true,
       post: post || posts[0] || null,
       feedback: feedback || (post ? post.notasFeedback : '') || '',
-      estado: estado || (post ? post.estadoAprobacion : 'En corrección') || 'En corrección'
+      estado: estado || (post ? post.estadoAprobacion : 'En proceso') || 'En proceso'
     });
   };
 
@@ -128,6 +128,7 @@ export default function App() {
               return {
                 ...p,
                 estadoAprobacion: remote.estadoAprobacion || p.estadoAprobacion,
+                semana: remote.semana || p.semana,
                 notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
                 editableLink: remote.editableLink || p.editableLink,
                 viewLink: remote.viewLink || p.viewLink
@@ -169,6 +170,7 @@ export default function App() {
           if (custom) {
             // El link de Canva siempre sale de los datos publicados, no del navegador
             const { editableLink: _ignorado, ...resto } = custom;
+            if (resto.estadoAprobacion) resto.estadoAprobacion = normalizeEstado(resto.estadoAprobacion);
             return {
               ...p,
               ...resto
@@ -225,7 +227,7 @@ export default function App() {
     }
 
     // Enviar cambios a Notion para que aparezcan en todos los computadores
-    if (updates.notasFeedback !== undefined || updates.estadoAprobacion || updates.editableLink) {
+    if (updates.notasFeedback !== undefined || updates.estadoAprobacion || updates.editableLink || updates.semana) {
       const res = await savePostToNotion(postId, updates);
       if (res.success) {
         showToast('Guardado y sincronizado con Notion', 'success');

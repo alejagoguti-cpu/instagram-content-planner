@@ -23,20 +23,25 @@ const getHeaders = () => ({
 // Normalizar estados para Notion y el planificador
 export const mapNotionStatusToLocal = (notionStatus) => {
   if (!notionStatus) return 'Aprobado';
-  if (notionStatus.toLowerCase().includes('corrección') || notionStatus.toLowerCase().includes('correcion')) {
-    return 'En corrección';
+  const t = notionStatus.toLowerCase();
+  if (t.includes('corrección') || t.includes('correcion') || t.includes('desaprobado')) {
+    return 'Corrección';
   }
-  if (notionStatus.toLowerCase().includes('desaprobado')) {
-    return 'Desaprobado';
+  if (t.includes('proceso')) {
+    return 'En proceso';
   }
   return 'Aprobado';
 };
 
 export const mapLocalStatusToNotion = (localStatus) => {
-  if (localStatus === 'En corrección') return 'En corrección';
-  if (localStatus === 'Desaprobado') return 'Desaprobado';
+  if (localStatus === 'Corrección') return 'En corrección';
+  if (localStatus === 'En proceso') return 'En proceso';
   return 'Aprobado (Copy y Board)';
 };
+
+// Estados antiguos (En corrección / Desaprobado) -> categorías actuales
+export const normalizeEstado = (estado) =>
+  estado === 'En corrección' || estado === 'Desaprobado' ? 'Corrección' : estado;
 
 // Obtener actualizaciones en vivo desde Notion para todos los computadores
 export const fetchNotionLiveUpdates = async () => {
@@ -137,6 +142,13 @@ export const savePostToNotion = async (postId, updates) => {
     if (updates.editableLink) {
       propertiesToUpdate['Editable (Canva / Link)'] = {
         url: updates.editableLink
+      };
+    }
+
+    // 4. Mover el post de semana
+    if (updates.semana) {
+      propertiesToUpdate['Semana'] = {
+        select: { name: updates.semana }
       };
     }
 

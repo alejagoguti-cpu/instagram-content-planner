@@ -344,7 +344,7 @@ export default function ReferentePreviewModal({ post, onClose, onUpdateEstado, o
         <div className="p-3.5 border-t border-white/[0.08] bg-[#151518] flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="text-xs text-zinc-500 font-medium">Estado:</span>
-            {['Aprobado', 'En corrección', 'Desaprobado'].map(st => (
+            {['Aprobado', 'En proceso', 'Corrección'].map(st => (
               <button
                 key={st}
                 onClick={() => handleStatusChange(st)}
