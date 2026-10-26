@@ -129,7 +129,8 @@ export default function App() {
                 ...p,
                 estadoAprobacion: remote.estadoAprobacion || p.estadoAprobacion,
                 notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
-                editableLink: remote.editableLink || p.editableLink
+                editableLink: remote.editableLink || p.editableLink,
+                viewLink: remote.viewLink || p.viewLink
               };
             }
             return p;

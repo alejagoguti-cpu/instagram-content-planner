@@ -21,6 +21,16 @@ import { sendInstantEmailNotification } from '../services/notificationService.js
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
+// Enlace público de vista de Canva (…/design/ID/TOKEN/view) -> versión incrustable en vivo
+const getCanvaEmbedUrl = (post) => {
+  const candidates = [post.viewLink, post.editableLink];
+  for (const link of candidates) {
+    const m = typeof link === 'string' && link.match(/^https:\/\/(?:www\.)?canva\.com\/design\/[^/]+\/[^/?#]+\/view/);
+    if (m) return m[0] + '?embed';
+  }
+  return null;
+};
+
 export default function FeedMatrixView({
   posts,
   pinnedPosts = [],
@@ -158,8 +168,16 @@ export default function FeedMatrixView({
         <div>
           
           {/* Thumbnail / Header */}
-          <div className={`relative ${post.slides?.length ? 'aspect-[4/5]' : 'aspect-[16/10]'} bg-[#0c0c0e] border-b border-white/[0.06] overflow-hidden`}>
-            {post.slides?.length ? (
+          <div className={`relative ${(getCanvaEmbedUrl(post) || post.slides?.length) ? 'aspect-[4/5]' : 'aspect-[16/10]'} bg-[#0c0c0e] border-b border-white/[0.06] overflow-hidden`}>
+            {getCanvaEmbedUrl(post) ? (
+              <iframe
+                src={getCanvaEmbedUrl(post)}
+                title={post.pieza}
+                loading="lazy"
+                allowFullScreen
+                className="w-full h-full border-0 bg-white"
+              />
+              ) : post.slides?.length ? (
               <SlideCarousel slides={post.slides} alt={post.pieza} />
             ) : post.coverImage ? (
               <img
@@ -204,7 +222,7 @@ export default function FeedMatrixView({
             </div>
 
             {/* Hover overlay para ver láminas */}
-            <div className={`absolute opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ${post.slides?.length ? 'bottom-8 right-2' : 'inset-0 bg-black/60'}`}>
+            <div className={`absolute opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ${(getCanvaEmbedUrl(post) || post.slides?.length) ? 'bottom-8 right-2' : 'inset-0 bg-black/60'}`}>
               <button
                 onClick={() => onPreviewReferente(post)}
                 className="px-3 py-1.5 rounded bg-white text-zinc-900 text-xs font-medium flex items-center gap-1.5 shadow-md"

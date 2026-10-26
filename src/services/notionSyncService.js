@@ -91,6 +91,7 @@ export const fetchNotionLiveUpdates = async () => {
         caption: `${pieza}\n\nNueva publicación sincronizada directamente desde Notion.\n\n• • •\n#Bitaxus`,
         linkReferente,
         editableLink: canvaLink || null,
+        viewLink: page.properties?.['Vista (Canva / Link)']?.url || null,
         estadoAprobacion: mapNotionStatusToLocal(estadoRaw),
         estadoNotionOriginal: estadoRaw,
         notasFeedback: observaciones || '',
