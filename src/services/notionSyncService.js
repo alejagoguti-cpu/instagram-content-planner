@@ -97,6 +97,9 @@ export const fetchNotionLiveUpdates = async () => {
         linkReferente,
         editableLink: canvaLink || null,
         viewLink: page.properties?.['Vista (Canva / Link)']?.url || null,
+        fechaNotion: page.properties?.Fecha?.date?.start || null,
+        fechaEntregaNotion: page.properties?.['Fecha de Entrega']?.date?.start || null,
+        diaNotion: page.properties?.['Día']?.select?.name || null,
         estadoAprobacion: mapNotionStatusToLocal(estadoRaw),
         estadoNotionOriginal: estadoRaw,
         notasFeedback: observaciones || '',
@@ -143,6 +146,17 @@ export const savePostToNotion = async (postId, updates) => {
       propertiesToUpdate['Editable (Canva / Link)'] = {
         url: updates.editableLink
       };
+    }
+
+    // Fechas (Publicación, Solicitado) y día de la semana
+    if (updates.fecha) {
+      propertiesToUpdate['Fecha'] = { date: { start: updates.fecha } };
+    }
+    if (updates.dia) {
+      propertiesToUpdate['Día'] = { select: { name: updates.dia } };
+    }
+    if (updates.fechaEntrega) {
+      propertiesToUpdate['Fecha de Entrega'] = { date: { start: updates.fechaEntrega } };
     }
 
     // 4. Mover el post de semana

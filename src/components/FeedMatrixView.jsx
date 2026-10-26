@@ -236,11 +236,28 @@ export default function FeedMatrixView({
             <div className="p-2 rounded bg-black/40 border border-white/[0.06] text-[10px] font-mono grid grid-cols-2 gap-2">
               <div>
                 <span className="text-zinc-500 block">Solicitado:</span>
-                <span className="text-zinc-300">{post.fechaEntrega || '2026-10-13'}</span>
+                <input
+                  type="date"
+                  value={post.fechaEntrega || ''}
+                  onChange={(e) => e.target.value && onUpdatePostData(post.id, { fechaEntrega: e.target.value })}
+                  title="Cambiar fecha de solicitud (se guarda en Notion)"
+                  className="bg-transparent text-zinc-300 text-[10px] font-mono focus:outline-none cursor-pointer w-full"
+                />
               </div>
               <div>
                 <span className="text-zinc-500 block">Publicación:</span>
-                <span className="text-white font-medium">{post.fecha || 'Sin fecha'}</span>
+                <input
+                  type="date"
+                  value={post.fecha || ''}
+                  onChange={(e) => {
+                    if (!e.target.value) return;
+                    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+                    const dia = dias[new Date(e.target.value + 'T00:00:00').getDay()];
+                    onUpdatePostData(post.id, { fecha: e.target.value, dia });
+                  }}
+                  title="Cambiar fecha de publicación (se guarda en Notion)"
+                  className="bg-transparent text-white font-medium text-[10px] font-mono focus:outline-none cursor-pointer w-full"
+                />
               </div>
             </div>
 
