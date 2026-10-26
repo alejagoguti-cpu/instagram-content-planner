@@ -16,7 +16,7 @@ import {
   RotateCcw,
   Mail
 } from 'lucide-react';
-import SlideCarousel from './SlideCarousel.jsx';
+import CardPreview from './CardPreview.jsx';
 import { sendInstantEmailNotification } from '../services/notificationService.js';
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -169,27 +169,7 @@ export default function FeedMatrixView({
           
           {/* Thumbnail / Header */}
           <div className={`relative ${(getCanvaEmbedUrl(post) || post.slides?.length) ? 'aspect-[4/5]' : 'aspect-[16/10]'} bg-[#0c0c0e] border-b border-white/[0.06] overflow-hidden`}>
-            {getCanvaEmbedUrl(post) ? (
-              <iframe
-                src={getCanvaEmbedUrl(post)}
-                title={post.pieza}
-                loading="lazy"
-                allowFullScreen
-                className="w-full h-full border-0 bg-white"
-              />
-              ) : post.slides?.length ? (
-              <SlideCarousel slides={post.slides} alt={post.pieza} />
-            ) : post.coverImage ? (
-              <img
-                src={post.coverImage}
-                alt={post.pieza}
-                className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-200"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-zinc-600 text-xs font-mono">
-                Sin board
-              </div>
-            )}
+            <CardPreview post={post} embedUrl={getCanvaEmbedUrl(post)} />
 
             {/* Turno Label (Sin emojis) */}
             <div className="absolute top-2 left-2">
