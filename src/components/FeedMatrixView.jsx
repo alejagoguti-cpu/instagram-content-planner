@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Mail
 } from 'lucide-react';
+import SlideCarousel from './SlideCarousel.jsx';
 import { sendInstantEmailNotification } from '../services/notificationService.js';
 
 const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -157,8 +158,10 @@ export default function FeedMatrixView({
         <div>
           
           {/* Thumbnail / Header */}
-          <div className="relative aspect-[16/10] bg-[#0c0c0e] border-b border-white/[0.06] overflow-hidden">
-            {post.coverImage ? (
+          <div className={`relative ${post.slides?.length ? 'aspect-[4/5]' : 'aspect-[16/10]'} bg-[#0c0c0e] border-b border-white/[0.06] overflow-hidden`}>
+            {post.slides?.length ? (
+              <SlideCarousel slides={post.slides} alt={post.pieza} />
+            ) : post.coverImage ? (
               <img
                 src={post.coverImage}
                 alt={post.pieza}
@@ -201,7 +204,7 @@ export default function FeedMatrixView({
             </div>
 
             {/* Hover overlay para ver láminas */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className={`absolute opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center ${post.slides?.length ? 'bottom-8 right-2' : 'inset-0 bg-black/60'}`}>
               <button
                 onClick={() => onPreviewReferente(post)}
                 className="px-3 py-1.5 rounded bg-white text-zinc-900 text-xs font-medium flex items-center gap-1.5 shadow-md"
