@@ -8,6 +8,7 @@ import ReferentePreviewModal from './components/ReferentePreviewModal.jsx';
 import NotificationModal from './components/NotificationModal.jsx';
 import notionPosts from './data/notionPosts.json';
 import { CheckCircle2, AlertCircle, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import canvaViews from './data/canvaViews.json';
 import { fetchNotionLiveUpdates, savePostToNotion, normalizeEstado } from './services/notionSyncService.js';
 
 // Generar una fecha de solicitud/entrega realista previa a la fecha de publicación
@@ -46,6 +47,7 @@ export default function App() {
       ...p,
       fechaEntrega: p.fechaEntrega || calcularFechaEntrega(p.fecha),
       editableLink: p.editableLink || p.linkEntrega || `https://www.canva.com/folder/bitaxus-proyecto-${idx + 1}`,
+      viewLink: canvaViews[p.id] || p.viewLink,
       isPinned: idx < 3, // Por defecto fijar 3 posts clave
       estadoAprobacion: p.estadoAprobacion || 'Aprobado',
       notasFeedback: p.notasFeedback || ''
@@ -143,7 +145,7 @@ export default function App() {
           // Detectar posts NUEVOS creados directamente en Notion y agregarlos al inicio
           const newPostsFromNotion = allNotionPosts
             .filter(np => !prevMap.has(np.id))
-            .map(np => ({ ...np, editableLink: np.editableLink || `https://www.canva.com/folder/bitaxus-${np.id}` }));
+            .map(np => ({ ...np, viewLink: canvaViews[np.id] || np.viewLink, editableLink: np.editableLink || `https://www.canva.com/folder/bitaxus-${np.id}` }));
           const result = newPostsFromNotion.length > 0 ? [...newPostsFromNotion, ...updated] : updated;
 
           return result;

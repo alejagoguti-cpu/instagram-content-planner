@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+  schedule:
+    # Cada 10 minutos: lee los links de Canva de Notion y actualiza las vistas previas
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -29,6 +32,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Resolver links de Canva desde Notion
+        run: node scripts/resolveCanvaViews.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
 
       - name: Build application
         run: npm run build

@@ -25,8 +25,9 @@ const DIAS_ORDEN = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sába
 const getCanvaEmbedUrl = (post) => {
   const candidates = [post.viewLink, post.editableLink];
   for (const link of candidates) {
-    const m = typeof link === 'string' && link.match(/^https:\/\/(?:www\.)?canva\.com\/design\/[^/]+\/[^/?#]+\/view/);
-    if (m) return m[0] + '?embed';
+    // El token del diseño es el mismo en /edit y en /view
+    const m = typeof link === 'string' && link.match(/^(https:\/\/(?:www\.)?canva\.com\/design\/[^/]+\/[^/?#]+)\/(?:view|edit)/);
+    if (m) return m[1] + '/view?embed';
   }
   return null;
 };
