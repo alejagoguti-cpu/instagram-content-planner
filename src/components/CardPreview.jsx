@@ -23,20 +23,24 @@ export default function CardPreview({ post, embedUrl }) {
   if (!embedUrl && !hasSlides) return inspo;
   // Diseño sin inspo: directo al carrusel
   if (!post.coverImage) {
-    return hasSlides ? <SlideCarousel slides={post.slides} alt={post.pieza} /> : null;
+    return embedUrl
+      ? <iframe key={embedUrl} src={embedUrl} title={post.pieza} loading="lazy" allowFullScreen className="w-full h-full border-0 bg-white" />
+      : <SlideCarousel slides={post.slides} alt={post.pieza} />;
   }
 
-  // Las láminas exportadas de Canva se ven siempre; el iframe solo si el diseño es público
-  const diseno = hasSlides ? (
-    <SlideCarousel slides={post.slides} alt={post.pieza} />
-  ) : (
+  // El diseño en vivo de Canva (link público) tiene prioridad: así cualquier cambio en Canva
+  // se ve al instante. Las láminas exportadas solo se usan cuando no hay link público.
+  const diseno = embedUrl ? (
     <iframe
+      key={embedUrl}
       src={embedUrl}
       title={post.pieza}
       loading="lazy"
       allowFullScreen
       className="w-full h-full border-0 bg-white"
     />
+  ) : (
+    <SlideCarousel slides={post.slides} alt={post.pieza} />
   );
 
   return (
