@@ -137,7 +137,7 @@ export default function App() {
                 historiaLink: remote.historiaLink || p.historiaLink,
                 notasFeedback: remote.notasFeedback !== undefined && remote.notasFeedback !== '' ? remote.notasFeedback : p.notasFeedback,
                 editableLink: remote.editableLink || p.editableLink,
-                viewLink: remote.viewLink || canvaViews[p.id] || (remote.editableLink ? null : p.viewLink)
+                viewLink: remote.viewLink || canvaViews[p.id] || (remote.editableLink && remote.editableLink !== p.editableLink ? null : p.viewLink)
               };
             }
             return p;
