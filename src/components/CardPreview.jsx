@@ -17,23 +17,31 @@ export default function CardPreview({ post, embedUrl }) {
     </div>
   );
 
-  if (!embedUrl) {
-    return post.slides?.length ? <SlideCarousel slides={post.slides} alt={post.pieza} /> : inspo;
+  const hasSlides = post.slides?.length > 0;
+
+  // Sin diseño todavía: solo la inspo
+  if (!embedUrl && !hasSlides) return inspo;
+  // Diseño sin inspo: directo al carrusel
+  if (!post.coverImage) {
+    return hasSlides ? <SlideCarousel slides={post.slides} alt={post.pieza} /> : null;
   }
+
+  // Las láminas exportadas de Canva se ven siempre; el iframe solo si el diseño es público
+  const diseno = hasSlides ? (
+    <SlideCarousel slides={post.slides} alt={post.pieza} />
+  ) : (
+    <iframe
+      src={embedUrl}
+      title={post.pieza}
+      loading="lazy"
+      allowFullScreen
+      className="w-full h-full border-0 bg-white"
+    />
+  );
 
   return (
     <>
-      {tab === 'inspo' ? (
-        inspo
-      ) : (
-        <iframe
-          src={embedUrl}
-          title={post.pieza}
-          loading="lazy"
-          allowFullScreen
-          className="w-full h-full border-0 bg-white"
-        />
-      )}
+      {tab === 'inspo' ? inspo : diseno}
       <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex rounded-full overflow-hidden border border-white/20 bg-black/70 backdrop-blur-sm text-[10px] font-medium">
         {[
           ['inspo', 'Inspo'],
